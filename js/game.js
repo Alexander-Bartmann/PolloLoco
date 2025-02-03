@@ -24,6 +24,9 @@ window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
         keyboard.space = true;
     }
+    if (e.code === "KeyR") {
+        keyboard.r = true;
+    }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -41,5 +44,8 @@ window.addEventListener("keyup", (e) => {
     }
     if (e.code === "Space") {
         keyboard.space = false;
+    }
+    if (e.code === "KeyR") {
+        keyboard.r = false;
     }
 });

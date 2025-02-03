@@ -1,5 +1,5 @@
 class MoveableObject extends DrawableObject {
-    speed = 0.25;
+    speed = 0.20;
     otherDirection = false;
     speedY = 0;
     acceleration = 2;
@@ -16,7 +16,11 @@ class MoveableObject extends DrawableObject {
     }
 
     isAboveGround(){
-        return this.y < 180;
+        if(this instanceof ThrowableObject){
+            return true;
+        } else {
+            return this.y < 180;
+        }
     }
 
     isColliding(mo){

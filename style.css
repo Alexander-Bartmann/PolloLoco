@@ -5,5 +5,19 @@ body{
 }
 
 canvas {
+    display: block;
     background-color: black;
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+    
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
 }
