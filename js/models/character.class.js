@@ -87,6 +87,6 @@ class Character extends MoveableObject{
     }
 
     jump() {
-        this.speedY = 20;
+        this.speedY = 25;
     }
 }

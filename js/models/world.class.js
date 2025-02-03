@@ -11,6 +11,8 @@ class World {
     throwableObjects = [];
     coins = [];
     bottles = [];
+    endboss = new Endboss();
+    endbossStatusBar = new EndbossStatusBar();
 
     constructor(canvas , keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -32,6 +34,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkEndboss();
         }, 200);
     }
 
@@ -45,7 +48,7 @@ class World {
     }
 
     initializeBottles() {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
             let bottle = new Bottles();
             bottle.x = 200 + Math.random() * 2000;
             bottle.y = 50 + Math.random() * 100;
@@ -58,8 +61,13 @@ class World {
             let bottle = new ThrowableObject(this.character.x, this.character.y);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;
-            // Übergebe direkt die Anzahl der Flaschen
             this.bottlebar.setPercentage(this.character.bottles);
+        }
+    }
+
+    checkEndboss() {
+        if (this.character.x > this.endboss.x - 720) {
+            this.endboss.animate();
         }
     }
 
@@ -83,8 +91,15 @@ class World {
             if (this.character.isColliding(bottle)) {
                 this.bottles.splice(index, 1);
                 this.character.bottles += 1;
-                // Übergebe direkt die Anzahl der Flaschen
                 this.bottlebar.setPercentage(this.character.bottles);
+            }
+        });
+
+        this.throwableObjects.forEach((bottle, bottleIndex) => {
+            if (this.endboss.isColliding(bottle)) {
+                this.endboss.hit();
+                this.endbossStatusBar.setPercentage(this.endboss.energy);
+                this.throwableObjects.splice(bottleIndex, 1);
             }
         });
     }
@@ -101,6 +116,9 @@ class World {
         this.addToMap(this.statusbar);
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlebar);
+        if (this.character.x > this.endboss.x - 720) {
+            this.addToMap(this.endbossStatusBar);
+        }
     
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
