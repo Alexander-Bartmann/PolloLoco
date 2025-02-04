@@ -34,8 +34,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-            this.checkEndboss();
-        }, 200);
+        }, 100);
     }
 
     initializeCoins() {
@@ -51,7 +50,6 @@ class World {
         for (let i = 0; i < 20; i++) {
             let bottle = new Bottles();
             bottle.x = 200 + Math.random() * 2000;
-            bottle.y = 50 + Math.random() * 100;
             this.bottles.push(bottle);
         }
     }
@@ -62,12 +60,6 @@ class World {
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;
             this.bottlebar.setPercentage(this.character.bottles);
-        }
-    }
-
-    checkEndboss() {
-        if (this.character.x > this.endboss.x - 720) {
-            this.endboss.animate();
         }
     }
 
