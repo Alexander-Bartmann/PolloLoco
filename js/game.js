@@ -6,6 +6,7 @@ function init(){
     canvas = document.getElementById('canvas');
     world = new World(canvas , keyboard);
     console.log('My Character is ' , world.character);
+    console.log('endboss is ' , world.endboss);
 }
 
 window.addEventListener("keydown", (e) => {
