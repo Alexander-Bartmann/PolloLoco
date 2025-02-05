@@ -11,7 +11,7 @@ class World {
     throwableObjects = [];
     coins = [];
     bottles = [];
-    endboss = this.level.enemies.find(enemy => enemy instanceof Endboss); // Endboss wird hier aus dem Level initialisiert
+    endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     endbossStatusBar = new EndbossStatusBar();
 
     constructor(canvas , keyboard) {
@@ -24,8 +24,6 @@ class World {
         this.initializeCoins();
         this.initializeBottles();
         this.coinbar =  new CoinBar();
-        // Entferne die doppelte Initialisierung des Endbosses
-        // this.endboss = new Endboss();
     }
 
     setWorld() {
@@ -68,9 +66,9 @@ class World {
     checkCollisions(){
         this.level.enemies.forEach(enemy => {
             if(this.character.isColliding(enemy)){
-                if (enemy instanceof Chicken && this.character.isAboveX(enemy) && this.character.isAbove(enemy)) {
+                if ((enemy instanceof Chicken || enemy instanceof ChickenSmall) && this.character.isAbove(enemy)) {
                     enemy.die();
-                } else {
+                } else if (!((enemy instanceof Chicken || enemy instanceof ChickenSmall) && enemy.isDead)) {
                     this.character.hit();
                     this.statusbar.setPercentage(this.character.energy);
                 }

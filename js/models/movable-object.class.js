@@ -36,7 +36,7 @@ class MoveableObject extends DrawableObject {
     }
 
     isAbove(mo) {
-        return this.y + this.height >= mo.y && this.y <= mo.y + mo.height;
+        return this.y + this.height <= mo.y + mo.height / 2;
     }
 
     hit() {
