@@ -3,7 +3,7 @@ class Endboss extends MoveableObject {
     height = 400;
     width = 300;
     y = 45;
-    speed = 10;
+    speed = 0.3;
 
     images_walk = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -52,26 +52,31 @@ class Endboss extends MoveableObject {
         this.loadImages(this.images_walk);
         this.loadImages(this.images_alert);
         this.loadImages(this.images_dead);
-        this.x = 2200;  
-        this.speed = 0.2 + Math.random() * 0.2;
+        this.x = 2200;
         this.animate();      
     }
 
     animate() {
         setInterval(() => {
+            if(this.isDead()){
+                console.log('Endboss is dead');
+                this.playAnimation(this.images_dead);
+            } else if (this.isHurt()){
+                console.log('Endboss is hurt');
+                this.playAnimation(this.images_hurt);
+            } else if(this.alert){
+                console.log('Endboss is alert');
+                this.playAnimation(this.images_alert);
+            } else {
+                console.log('Endboss is walking');
+                this.playAnimation(this.images_walk);
+            }            
+        },30);
+
+        setInterval(() => {
             if (!this.isDead()) {
                 this.x -= this.speed;
             }
         }, 1000 / 60);
-
-        setInterval(() => {
-            if(this.isDead()){
-                this.playAnimation(this.images_dead);
-            } else if (this.isHurt()){
-                this.playAnimation(this.images_hurt);
-            } else {
-                this.playAnimation(this.images_walk);
-            }            
-        });
     }
 }
