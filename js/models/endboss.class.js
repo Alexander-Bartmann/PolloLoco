@@ -4,6 +4,7 @@ class Endboss extends MoveableObject {
     width = 300;
     y = 45;
     speed = 0.3;
+    hurtTimeout = false;
 
     images_walk = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -40,7 +41,6 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
 
-
     images_dead = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
@@ -60,7 +60,6 @@ class Endboss extends MoveableObject {
         this.x = 2200;
         this.animate();
     }
-    
 
     animate() {
         setInterval(() => {
@@ -72,6 +71,7 @@ class Endboss extends MoveableObject {
                 this.playAnimationOnce(this.images_hurt, () => {
                     this.playAnimation(this.images_walk);
                 });
+                this.stopMovement();
             } else if (this.alert) {
                 console.log('Endboss is alert');
                 this.playAnimation(this.images_alert);
@@ -82,10 +82,16 @@ class Endboss extends MoveableObject {
         }, 200);
     
         setInterval(() => {
-            if (!this.isDead()) {
+            if (!this.isDead() && !this.hurtTimeout) {
                 this.x -= this.speed;
             }
         }, 1000 / 60);
     }
-    
+
+    stopMovement() {
+        this.hurtTimeout = true;
+        setTimeout(() => {
+            this.hurtTimeout = false;
+        }, 1500); // Stoppe die Bewegung für 1,5 Sekunden
+    }
 }
