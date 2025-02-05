@@ -41,6 +41,8 @@ class Character extends MoveableObject{
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
     world;
+    movementInterval;
+    animationInterval;
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -67,7 +69,7 @@ class Character extends MoveableObject{
 
     animate() {
 
-        setInterval(() => {
+        this.movementInterval = setInterval(() => {
             if(this.world.keyboard.right && this.x < this.world.level.level_end_x){
                 this.moveRight();
             }
@@ -83,9 +85,14 @@ class Character extends MoveableObject{
             this.world.camera_x = -this.x + 100; 
         }, 1000/60);
 
-        setInterval(() => {
+        this.animationInterval = setInterval(() => {
             if(this.isDead()){
+                let deathAnimationTime = this.images_dead.length * 100; // Schnellere Animation als Endboss
                 this.playAnimation(this.images_dead);
+                setTimeout(() => {
+                    this.stopAllIntervals();
+                    this.img = this.imageCache[this.images_dead[this.images_dead.length - 1]];
+                }, deathAnimationTime);
             } else if (this.isHurt()){
                 this.playAnimation(this.images_hurt);
             } else if(this.isAboveGround()){
@@ -96,6 +103,11 @@ class Character extends MoveableObject{
                 }
             }            
         }, 30);
+    }
+
+    stopAllIntervals() {
+        clearInterval(this.animationInterval);
+        clearInterval(this.movementInterval);
     }
 
     jump() {
