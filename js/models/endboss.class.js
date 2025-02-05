@@ -9,7 +9,7 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
         'img/4_enemie_boss_chicken/1_walk/G3.png',
-        'img/4_enemie_boss_chicken/1_walk/G4.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png'
     ];
 
     images_alert = [
@@ -20,63 +20,72 @@ class Endboss extends MoveableObject {
         'img/4_enemie_boss_chicken/2_alert/G9.png',
         'img/4_enemie_boss_chicken/2_alert/G10.png',
         'img/4_enemie_boss_chicken/2_alert/G11.png',
-        'img/4_enemie_boss_chicken/2_alert/G12.png',
+        'img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
 
     images_attack = [
-        'img/4_enemie_boss_chicken/3_hurt/G13.png',
-        'img/4_enemie_boss_chicken/3_hurt/G14.png',
-        'img/4_enemie_boss_chicken/3_hurt/G15.png',
-        'img/4_enemie_boss_chicken/3_hurt/G16.png',
-        'img/4_enemie_boss_chicken/3_hurt/G17.png',
-        'img/4_enemie_boss_chicken/3_hurt/G18.png',
-        'img/4_enemie_boss_chicken/3_hurt/G19.png',
-        'img/4_enemie_boss_chicken/3_hurt/G20.png',
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png'
     ];
 
     images_hurt = [
         'img/4_enemie_boss_chicken/4_hurt/G21.png',
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
-        'img/4_enemie_boss_chicken/4_hurt/G23.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
 
 
     images_dead = [
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
-    constructor(){
+    constructor() {
         super();
         this.loadImages(this.images_walk);
         this.loadImages(this.images_alert);
+        this.loadImages(this.images_attack);
+        this.loadImages(this.images_hurt);
         this.loadImages(this.images_dead);
+        
+        this.img = this.imageCache[this.images_walk[0]];
+        
         this.x = 2200;
-        this.animate();      
+        this.animate();
     }
+    
 
     animate() {
         setInterval(() => {
-            if(this.isDead()){
+            if (this.isDead()) {
                 console.log('Endboss is dead');
                 this.playAnimation(this.images_dead);
-            } else if (this.isHurt()){
+            } else if (this.isHurt()) {
                 console.log('Endboss is hurt');
-                this.playAnimation(this.images_hurt);
-            } else if(this.alert){
+                this.playAnimationOnce(this.images_hurt, () => {
+                    this.playAnimation(this.images_walk);
+                });
+            } else if (this.alert) {
                 console.log('Endboss is alert');
                 this.playAnimation(this.images_alert);
             } else {
                 console.log('Endboss is walking');
                 this.playAnimation(this.images_walk);
-            }            
-        },30);
-
+            }
+        }, 200);
+    
         setInterval(() => {
             if (!this.isDead()) {
                 this.x -= this.speed;
             }
         }, 1000 / 60);
     }
+    
 }

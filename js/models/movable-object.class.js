@@ -39,11 +39,11 @@ class MoveableObject extends DrawableObject {
         }
     }
 
-    isHurt(){
+    isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
-        timepassed = timepassed / 1000;
-        return timepassed < 1;
+        return (timepassed / 1000) < 1.5;
     }
+    
 
     isDead(){
         return this.energy == 0;
@@ -55,6 +55,19 @@ class MoveableObject extends DrawableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     }
+
+    playAnimationOnce(images, callback) {
+        let i = 0;
+        let interval = setInterval(() => {
+            this.img = this.imageCache[images[i]];
+            i++;
+            if (i >= images.length) {
+                clearInterval(interval);
+                if (callback) callback();
+            }
+        }, 100);
+    }
+    
 
     moveRight() {
         this.x += this.speed;
