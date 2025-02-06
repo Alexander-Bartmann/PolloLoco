@@ -19,7 +19,7 @@ h1 {
 
 .gameContainer {
     display: block;
-    background-color: transparent; /* Von black zu transparent geändert */
+    background-color: transparent;
 }
 
 .restartButton {
@@ -44,7 +44,7 @@ h1 {
     width: 720px;
     height: 480px;
     max-width: calc(100% - 32px);
-    background-color: transparent; /* Von black zu transparent geändert */
+    background-color: transparent;
 }
 
 #gameContainer.fullscreen {
@@ -103,7 +103,7 @@ h1 {
 .fullscreen {
     position: absolute;
     top: 10px;
-    left: 52px; /* 10px + 32px + 10px */
+    left: 52px; 
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -114,7 +114,7 @@ h1 {
 .audio {
     position: absolute;
     top: 10px;
-    left: 94px; /* 10px + 32px + 10px + 32px + 10px */
+    left: 94px;
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -211,9 +211,9 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    width: 150px; /* Größer gemacht */
-    height: 150px; /* Größer gemacht */
-    background-color: rgba(0, 0, 0, 0.8); /* Dunkler Hintergrund */
+    width: 150px;
+    height: 150px;
+    background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 10px;
 }
@@ -241,7 +241,7 @@ h1 {
     #gameContainer canvas {
         width: 100%;
         height: 100%;
-        object-fit: contain; /* Behält das Seitenverhältnis bei */
+        object-fit: contain;
     }
 
     .rotate-message {
@@ -323,7 +323,6 @@ h1 {
     position: relative;
 }
 
-/* Vereinheitlichung der Größen für Start, Game und Endscreen */
 #gameContainer canvas,
 .startScreen,
 .start-img,
@@ -338,7 +337,6 @@ h1 {
     object-fit: contain;
 }
 
-/* Überschreiben der vorherigen spezifischen Styles */
 @media screen and (orientation: portrait) and (max-width: 768px) {
     #gameContainer {
         transform: rotate(90deg);
@@ -362,8 +360,6 @@ h1 {
         transform: translate(-50%, -50%);
     }
 }
-
-/* Entferne alle anderen spezifischen Canvas/Container Größenanpassungen */
 
 .mobile-controls {
     display: none;

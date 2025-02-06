@@ -122,7 +122,6 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        // Normales Spielgeschehen zeichnen
         this.ctx.save();
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);    
@@ -159,7 +158,7 @@ class World {
                 this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
             }
             document.getElementById('restartButton').style.display = 'block';
-            document.querySelector('.mobile-controls').style.display = 'none'; // Mobile Controls ausblenden
+            document.querySelector('.mobile-controls').style.display = 'none';
         }
     
         requestAnimationFrame(() => this.draw());

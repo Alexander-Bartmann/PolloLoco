@@ -244,7 +244,6 @@ function initMobileControls() {
     const jumpBtn = document.getElementById('jumpButton');
     const throwBtn = document.getElementById('throwButton');
 
-    // Touch Events für mobile Steuerung
     leftBtn.addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.left = true;

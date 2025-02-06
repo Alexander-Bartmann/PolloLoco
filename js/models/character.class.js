@@ -89,7 +89,7 @@ class Character extends MoveableObject{
 
         this.animationInterval = setInterval(() => {
             if(this.isDead()){
-                let deathAnimationTime = this.images_dead.length * 100; // Schnellere Animation als Endboss
+                let deathAnimationTime = this.images_dead.length * 100;
                 this.playAnimation(this.images_dead);
                 setTimeout(() => {
                     this.stopAllIntervals();

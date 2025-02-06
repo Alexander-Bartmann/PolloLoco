@@ -16,8 +16,8 @@ class ThrowableObject extends MoveableObject {
     ];
 
     isSplashing = false;
-    hasDamaged = false; // Neue Variable um zu tracken ob bereits Schaden verursacht wurde
-    throwInterval; // Neue Variable für das Bewegungsintervall
+    hasDamaged = false;
+    throwInterval; 
 
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
@@ -45,7 +45,6 @@ class ThrowableObject extends MoveableObject {
         setInterval(() => {
             if (this.isSplashing) {
                 this.playAnimationOnce(this.images_bottleSplash, () => {
-                    // Flasche nach der Splash-Animation entfernen
                     this.toDelete = true;
                 });
             } else {
@@ -57,7 +56,7 @@ class ThrowableObject extends MoveableObject {
     splash() {
         this.isSplashing = true;
         this.speedY = 0;
-        clearInterval(this.throwInterval); // Stoppt die Bewegung nach rechts
+        clearInterval(this.throwInterval);
     }
 
     apllyGravity() {
