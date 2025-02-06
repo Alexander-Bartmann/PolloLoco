@@ -15,6 +15,8 @@ class World {
     endbossStatusBar = new EndbossStatusBar();
     gameOverImage = new Image();
     gameWonImage = new Image();
+    gameEndTimeout = false;
+    endScreenVisible = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -114,6 +116,8 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Normales Spielgeschehen zeichnen
         this.ctx.save();
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);    
@@ -136,7 +140,16 @@ class World {
         this.addObjectsToMap(this.throwableObjects);    
         this.ctx.restore();
 
-        if (this.character.isDead() || this.endboss.isDead()) {
+        // Game Over / Win Screen Logik
+        if ((this.character.isDead() || this.endboss.isDead()) && !this.gameEndTimeout) {
+            this.gameEndTimeout = true;
+            setTimeout(() => {
+                this.endScreenVisible = true;
+            }, 2000);
+        }
+
+        // Zeige End Screen wenn aktiviert
+        if (this.endScreenVisible) {
             this.ctx.fillStyle = 'black';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
             if (this.character.isDead()) {
@@ -147,10 +160,7 @@ class World {
             document.getElementById('restartButton').style.display = 'block';
         }
     
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        requestAnimationFrame(() => this.draw());
     }
 
     addObjectsToMap(objects){
