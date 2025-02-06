@@ -89,37 +89,30 @@ h1 {
     transform: scale(1.1);
 }
 
-.info-button {
+.info-button, .fullscreen, .audio {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 32px;
-    height: 32px;
+    width: 4.5%; /* Statt fixer Pixelwerte */
+    height: auto; /* Behält das Seitenverhältnis */
+    min-width: 20px; /* Minimalgröße */
+    max-width: 32px; /* Maximalgröße */
     cursor: pointer;
     transition: transform 0.2s;
     z-index: 2;
+}
+
+.info-button {
+    top: 15%; /* Statt fixer Pixelwerte */
+    left: 2%;
 }
 
 .fullscreen {
-    position: absolute;
-    top: 10px;
-    left: 52px; 
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    transition: transform 0.2s;
-    z-index: 2;
+    top: 15%;
+    left: 8%; /* Abstand relativ zur Containerbreite */
 }
 
 .audio {
-    position: absolute;
-    top: 10px;
-    left: 94px;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    transition: transform 0.2s;
-    z-index: 2;
+    top: 15%;
+    left: 14%;
 }
 
 .info-button:hover,
@@ -134,16 +127,19 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #A0DDFC;
-    padding: 20px;
+    padding: 3%; /* Relatives Padding */
     border-radius: 15px;
     z-index: 3;
-    min-width: 200px;
+    width: 40%; /* Relative Breite */
+    max-width: 400px; /* Maximale Breite */
+    min-width: 200px; /* Minimale Breite */
 }
 
 .info-dialog h2 {
     font-family: "Kablammo", serif;
     text-align: center;
     margin-bottom: 20px;
+    font-size: clamp(16px, 3vw, 24px); /* Responsive Schriftgröße */
 }
 
 .info-dialog ul {
@@ -154,7 +150,7 @@ h1 {
 .info-dialog li {
     margin: 10px 0;
     font-family: Arial, sans-serif;
-    font-size: 16px;
+    font-size: clamp(12px, 2.5vw, 16px); /* Responsive Schriftgröße */
     font-weight: bolder;
     justify-content: center;
     display: flex;
@@ -384,5 +380,16 @@ h1 {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .info-dialog {
+        width: 80%;
+        padding: 5%;
+    }
+
+    .info-button, .fullscreen, .audio {
+        width: 6%;
     }
 }
