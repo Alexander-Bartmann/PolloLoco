@@ -62,9 +62,7 @@ class World {
 
     initializeBottles() {
         for (let i = 0; i < 20; i++) {
-            let bottle = new Bottles();
-            bottle.x = 200 + Math.random() * 2000;
-            this.bottles.push(bottle);
+            this.bottles.push(new StaticBottle());
         }
     }
 
@@ -106,9 +104,16 @@ class World {
         });
 
         this.throwableObjects.forEach((bottle, bottleIndex) => {
-            if (this.endboss.isColliding(bottle)) {
+            if (this.endboss.isColliding(bottle) && !bottle.hasDamaged) {
+                bottle.splash();
+                bottle.hasDamaged = true;
                 this.endboss.hit();
                 this.endbossStatusBar.setPercentage(this.endboss.energy);
+            }
+            if (bottle.y >= 350) {
+                bottle.splash();
+            }
+            if (bottle.toDelete) {
                 this.throwableObjects.splice(bottleIndex, 1);
             }
         });
