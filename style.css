@@ -19,7 +19,7 @@ h1 {
 
 .gameContainer {
     display: block;
-    background-color: black;
+    background-color: transparent; /* Von black zu transparent geändert */
 }
 
 .restartButton {
@@ -44,7 +44,20 @@ h1 {
     width: 720px;
     height: 480px;
     max-width: calc(100% - 32px);
-    background-color: black;
+    background-color: transparent; /* Von black zu transparent geändert */
+}
+
+#gameContainer.fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+}
+
+#gameContainer.fullscreen canvas,
+#gameContainer.fullscreen .startScreen,
+#gameContainer.fullscreen .start-img {
+    width: 100%;
+    height: 100%;
 }
 
 #gameContainer canvas,
@@ -80,14 +93,38 @@ h1 {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
     transition: transform 0.2s;
     z-index: 2;
 }
 
-.info-button:hover {
+.fullscreen {
+    position: absolute;
+    top: 10px;
+    left: 52px; /* 10px + 32px + 10px */
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    z-index: 2;
+}
+
+.audio {
+    position: absolute;
+    top: 10px;
+    left: 94px; /* 10px + 32px + 10px + 32px + 10px */
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    z-index: 2;
+}
+
+.info-button:hover,
+.fullscreen:hover,
+.audio:hover {
     transform: scale(1.1);
 }
 
@@ -164,5 +201,192 @@ h1 {
 
     h1 {
         display: none;
+    }
+}
+
+.rotate-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 150px; /* Größer gemacht */
+    height: 150px; /* Größer gemacht */
+    background-color: rgba(0, 0, 0, 0.8); /* Dunkler Hintergrund */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+@media screen and (orientation: portrait) and (max-width: 768px) {
+    body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #gameContainer {
+        transform: rotate(90deg);
+        transform-origin: center;
+        width: 90vh !important;
+        height: 90vw !important;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    #gameContainer canvas {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Behält das Seitenverhältnis bei */
+    }
+
+    .rotate-message {
+        display: block;
+        position: fixed;
+        z-index: 1001;
+    }
+
+    .game {
+        width: 100%;
+        height: 100%;
+    }
+
+    #canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media screen and (orientation: landscape) and (max-width: 768px) {
+    body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #gameContainer {
+        transform: rotate(0deg);
+        width: 90vw !important;
+        height: 90vh !important;
+        margin: 0;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #gameContainer canvas {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .rotate-message {
+        display: none;
+    }
+
+    .game {
+        width: 100%;
+        height: 100%;
+    }
+
+    #canvas {
+        width: 90% !important;
+        height: 80% !important;
+        object-fit: contain;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Vereinheitlichung der Größen für Start, Game und Endscreen */
+#gameContainer canvas,
+.startScreen,
+.start-img,
+.game,
+.gameContainer canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+}
+
+/* Überschreiben der vorherigen spezifischen Styles */
+@media screen and (orientation: portrait) and (max-width: 768px) {
+    #gameContainer {
+        transform: rotate(90deg);
+        transform-origin: center;
+        width: 90vh !important;
+        height: 90vw !important;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+}
+
+@media screen and (orientation: landscape) and (max-width: 768px) {
+    #gameContainer {
+        width: 90vw !important;
+        height: 90vh !important;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Entferne alle anderen spezifischen Canvas/Container Größenanpassungen */
+
+.mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.mobile-controls img {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+    .mobile-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

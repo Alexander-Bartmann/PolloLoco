@@ -159,6 +159,7 @@ class World {
                 this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
             }
             document.getElementById('restartButton').style.display = 'block';
+            document.querySelector('.mobile-controls').style.display = 'none'; // Mobile Controls ausblenden
         }
     
         requestAnimationFrame(() => this.draw());
