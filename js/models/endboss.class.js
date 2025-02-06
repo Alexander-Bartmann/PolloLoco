@@ -60,31 +60,27 @@ class Endboss extends MoveableObject {
         
         this.img = this.imageCache[this.images_walk[0]];
         
-        this.x = 2200;
+        this.x = 2500;
         this.animate();
     }
 
     animate() {
         this.animationInterval = setInterval(() => {
             if (this.isDead()) {
-                console.log('Endboss is dead');
-                let deathAnimationTime = this.images_dead.length * 200; // Berechne Gesamtzeit der Animation
+                let deathAnimationTime = this.images_dead.length * 200;
                 this.playAnimation(this.images_dead);
                 setTimeout(() => {
                     this.stopAllIntervals();
                     this.img = this.imageCache[this.images_dead[this.images_dead.length - 1]];
                 }, deathAnimationTime);
             } else if (this.isHurt()) {
-                console.log('Endboss is hurt');
                 this.playAnimationOnce(this.images_hurt, () => {
                     this.playAnimation(this.images_walk);
                 });
                 this.stopMovement();
             } else if (this.alert) {
-                console.log('Endboss is alert');
                 this.playAnimation(this.images_alert);
             } else {
-                console.log('Endboss is walking');
                 this.playAnimation(this.images_walk);
             }
         }, 200);
@@ -105,6 +101,6 @@ class Endboss extends MoveableObject {
         this.hurtTimeout = true;
         setTimeout(() => {
             this.hurtTimeout = false;
-        }, 1500); // Stoppe die Bewegung für 1,5 Sekunden
+        }, 1500);
     }
 }

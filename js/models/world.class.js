@@ -13,17 +13,29 @@ class World {
     bottles = [];
     endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     endbossStatusBar = new EndbossStatusBar();
+    gameOverImage = new Image();
+    gameWonImage = new Image();
 
-    constructor(canvas , keyboard) {
+    constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/oh no you lost!.png';
+        this.gameWonImage.src = 'img/9_intro_outro_screens/win/won_2.png';
         this.draw();
         this.setWorld();
+    }
+
+    startGame() {
         this.run();
         this.initializeCoins();
         this.initializeBottles();
-        this.coinbar =  new CoinBar();
+        this.character.startAnimations();
+        this.level.enemies.forEach(enemy => {
+            if (enemy.startAnimations) {
+                enemy.startAnimations();
+            }
+        });
     }
 
     setWorld() {
@@ -102,16 +114,14 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.save();
-    
         this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-    
+        this.addObjectsToMap(this.level.backgroundObjects);    
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusbar);
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlebar);
+
         if (this.character.x > this.endboss.x - 720) {
             this.addToMap(this.endbossStatusBar);
         }
@@ -123,9 +133,19 @@ class World {
         this.addToMap(this.endboss);
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
-        this.addObjectsToMap(this.throwableObjects);
-    
+        this.addObjectsToMap(this.throwableObjects);    
         this.ctx.restore();
+
+        if (this.character.isDead() || this.endboss.isDead()) {
+            this.ctx.fillStyle = 'black';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            if (this.character.isDead()) {
+                this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
+            } else if (this.endboss.isDead()) {
+                this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
+            }
+            document.getElementById('restartButton').style.display = 'block';
+        }
     
         let self = this;
         requestAnimationFrame(function () {
