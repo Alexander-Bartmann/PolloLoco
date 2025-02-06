@@ -139,16 +139,12 @@ class World {
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.throwableObjects);    
         this.ctx.restore();
-
-        // Game Over / Win Screen Logik
         if ((this.character.isDead() || this.endboss.isDead()) && !this.gameEndTimeout) {
             this.gameEndTimeout = true;
             setTimeout(() => {
                 this.endScreenVisible = true;
             }, 2000);
         }
-
-        // Zeige End Screen wenn aktiviert
         if (this.endScreenVisible) {
             this.ctx.fillStyle = 'black';
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
