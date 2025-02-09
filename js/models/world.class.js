@@ -75,48 +75,65 @@ class World {
         }
     }
 
-    checkCollisions(){
-        this.level.enemies.forEach(enemy => {
-            if(this.character.isColliding(enemy)){
-                if ((enemy instanceof Chicken || enemy instanceof ChickenSmall) && this.character.isAbove(enemy)) {
-                    enemy.die();
-                } else if (!((enemy instanceof Chicken || enemy instanceof ChickenSmall) && enemy.isDead)) {
-                    this.character.hit();
-                    this.statusbar.setPercentage(this.character.energy);
-                }
-            }
+    checkCollisions() {
+        this.level.enemies.forEach((enemy) => {
+            this.enemiesCollide(enemy);
         });
 
         this.coins.forEach((coin, index) => {
-            if (this.character.isColliding(coin)) {
-                this.coins.splice(index, 1);
-                this.character.coins += 10;
-                this.coinbar.setPercentage(this.character.coins);
-            }
+            this.coinCollide(coin, index);
         });
 
         this.bottles.forEach((bottle, index) => {
-            if (this.character.isColliding(bottle)) {
-                this.bottles.splice(index, 1);
-                this.character.bottles += 1;
-                this.bottlebar.setPercentage(this.character.bottles);
-            }
+            this.bottleCollide(bottle, index);
+
         });
 
         this.throwableObjects.forEach((bottle, bottleIndex) => {
-            if (this.endboss.isColliding(bottle) && !bottle.hasDamaged) {
-                bottle.splash();
-                bottle.hasDamaged = true;
-                this.endboss.hit();
-                this.endbossStatusBar.setPercentage(this.endboss.energy);
-            }
-            if (bottle.y >= 350) {
-                bottle.splash();
-            }
-            if (bottle.toDelete) {
-                this.throwableObjects.splice(bottleIndex, 1);
-            }
+            this.throwableObjectsCollide(bottle, bottleIndex);
         });
+    }
+
+    throwableObjectsCollide(bottle, bottleIndex) {
+        if (this.endboss.isColliding(bottle) && !bottle.hasDamaged) {
+            bottle.splash();
+            bottle.hasDamaged = true;
+            this.endboss.hit();
+            this.endbossStatusBar.setPercentage(this.endboss.energy);
+        }
+        if (bottle.y >= 350) {
+            bottle.splash();
+        }
+        if (bottle.toDelete) {
+            this.throwableObjects.splice(bottleIndex, 1);
+        }
+    }
+
+    bottleCollide(bottle, index) {
+        if (this.character.isColliding(bottle)) {
+            this.bottles.splice(index, 1);
+            this.character.bottles += 1;
+            this.bottlebar.setPercentage(this.character.bottles);
+        }
+    }
+
+    coinCollide(coin, index) {
+        if (this.character.isColliding(coin)) {
+            this.coins.splice(index, 1);
+            this.character.coins += 10;
+            this.coinbar.setPercentage(this.character.coins);
+        }
+    }
+
+    enemiesCollide(enemy) {
+        if (this.character.isColliding(enemy)) {
+            if ((enemy instanceof Chicken || enemy instanceof ChickenSmall) && this.character.isAbove(enemy)) {
+                enemy.die();
+            } else if (!((enemy instanceof Chicken || enemy instanceof ChickenSmall) && enemy.isDead)) {
+                this.character.hit();
+                this.statusbar.setPercentage(this.character.energy);
+            }
+        }
     }
 
     draw() {

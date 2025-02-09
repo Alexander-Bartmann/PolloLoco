@@ -65,31 +65,46 @@ class Endboss extends MoveableObject {
     }
 
     animate() {
+        this.startAnimationInterval();
+        this.startMovementInterval();
+    }
+
+    startAnimationInterval() {
         this.animationInterval = setInterval(() => {
             if (this.isDead()) {
-                let deathAnimationTime = this.images_dead.length * 200;
-                this.playAnimation(this.images_dead);
-                setTimeout(() => {
-                    this.stopAllIntervals();
-                    this.img = this.imageCache[this.images_dead[this.images_dead.length - 1]];
-                }, deathAnimationTime);
+                this.handleDeathAnimation();
             } else if (this.isHurt()) {
-                this.playAnimationOnce(this.images_hurt, () => {
-                    this.playAnimation(this.images_walk);
-                });
-                this.stopMovement();
+                this.handleHurtAnimation();
             } else if (this.alert) {
                 this.playAnimation(this.images_alert);
             } else {
                 this.playAnimation(this.images_walk);
             }
         }, 200);
-    
+    }
+
+    startMovementInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead() && !this.hurtTimeout) {
                 this.x -= this.speed;
             }
         }, 1000 / 60);
+    }
+
+    handleDeathAnimation() {
+        let deathAnimationTime = this.images_dead.length * 200;
+        this.playAnimation(this.images_dead);
+        setTimeout(() => {
+            this.stopAllIntervals();
+            this.img = this.imageCache[this.images_dead[this.images_dead.length - 1]];
+        }, deathAnimationTime);
+    }
+
+    handleHurtAnimation() {
+        this.playAnimationOnce(this.images_hurt, () => {
+            this.playAnimation(this.images_walk);
+        });
+        this.stopMovement();
     }
 
     stopAllIntervals() {
