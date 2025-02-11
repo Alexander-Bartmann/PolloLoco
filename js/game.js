@@ -61,7 +61,6 @@ function renderCanvasTemplate() {
     return `
         <div class="game">
             <canvas id="canvas" width="720" height="480"></canvas>
-            <button onclick="reloadGame()" id="restartButton" class="restartButton">Restart Game</button>
             <div class="mobile-controls">
                 <img src="img/10_icons/linker-pfeil.png" id="leftButton" alt="Left">
                 <img src="img/10_icons/hoch.png" id="jumpButton" alt="Jump">

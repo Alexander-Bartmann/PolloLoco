@@ -24,8 +24,19 @@ class World {
         this.keyboard = keyboard;
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/oh no you lost!.png';
         this.gameWonImage.src = 'img/9_intro_outro_screens/win/won_2.png';
+        this.createRestartButton();
         this.draw();
         this.setWorld();
+    }
+
+    createRestartButton() {
+        this.restartButton = document.createElement('button');
+        this.restartButton.id = 'restartButton';
+        this.restartButton.className = 'restartButton';
+        this.restartButton.innerHTML = 'Restart Game';
+        this.restartButton.onclick = () => location.reload();
+        this.restartButton.style.display = 'none';
+        document.getElementById('gameContainer').appendChild(this.restartButton);
     }
 
     startGame() {
@@ -174,7 +185,9 @@ class World {
             } else if (this.endboss.isDead()) {
                 this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
             }
-            document.getElementById('restartButton').style.display = 'block';
+            setTimeout(() => {
+                this.restartButton.style.display = 'block';
+            }, 2000);
             document.querySelector('.mobile-controls').style.display = 'none';
         }
     
