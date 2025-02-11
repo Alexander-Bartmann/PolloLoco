@@ -2,10 +2,13 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let isFullscreen = false;
+let isMuted = false;
 
 function initStartScreen() {
     document.getElementById('gameContainer').innerHTML = initStartscreenHtml();
     checkOrientation();
+    const audioButton = document.querySelector('.audio');
+    audioButton.src = isMuted ? 'img/10_icons/ton-aus.png' : 'img/10_icons/lautstarke-des-lautsprechers.png';
 }
 
 function startGame() {
@@ -13,6 +16,9 @@ function startGame() {
     canvas = document.getElementById('canvas');
     init();
     world.startGame();
+    if (isMuted) {
+        muteAllSounds();
+    }
 }
 
 function init() {
@@ -105,7 +111,6 @@ function fullscreen() {
     isFullscreen = !isFullscreen;
 }
 
-// Event Listener für Fullscreen-Änderungen
 document.addEventListener('fullscreenchange', adjustFullscreenSize);
 document.addEventListener('webkitfullscreenchange', adjustFullscreenSize);
 document.addEventListener('mozfullscreenchange', adjustFullscreenSize);
@@ -117,7 +122,6 @@ function adjustFullscreenSize() {
     let startScreen = document.getElementById('startScreen');
 
     if (document.fullscreenElement) {
-        // Vollbild-Modus
         let width = window.innerWidth;
         let height = window.innerHeight;
         
@@ -133,7 +137,6 @@ function adjustFullscreenSize() {
             startScreen.style.height = `${height}px`;
         }
     } else {
-        // Normaler Modus
         gameContainer.style.width = '720px';
         gameContainer.style.height = '480px';
         
@@ -202,12 +205,10 @@ function handleMobileOrientation() {
     const gameContainer = document.getElementById('gameContainer');
     
     if (window.matchMedia("(orientation: portrait)").matches) {
-        // Portrait Modus
         showRotateMessage();
         gameContainer.classList.remove('landscape-mode');
         gameContainer.classList.add('portrait-mode');
     } else {
-        // Landscape Modus
         hideRotateMessage();
         gameContainer.classList.remove('portrait-mode');
         gameContainer.classList.add('landscape-mode');
@@ -242,13 +243,11 @@ function isMobile() {
 }
 
 function initMobileControls() {
-    // D-Pad Controls
     document.querySelectorAll('.dpad button').forEach(button => {
         button.addEventListener('touchstart', handleTouchStart);
         button.addEventListener('touchend', handleTouchEnd);
     });
 
-    // Bottle Button Control
     const bottleButton = document.querySelector('.bottle-mobil-throw');
     if (bottleButton) {
         bottleButton.addEventListener('touchstart', handleTouchStart);
@@ -296,5 +295,62 @@ function handleTouchEnd(e) {
                 keyboard.space = false;
                 break;
         }
+    }
+}
+
+function audio() {
+    isMuted = !isMuted;
+    const audioButton = document.querySelector('.audio');
+    
+    if (isMuted) {
+        audioButton.src = 'img/10_icons/ton-aus.png';
+        if (world) { 
+            muteAllSounds();
+        }
+    } else {
+        audioButton.src = 'img/10_icons/lautstarke-des-lautsprechers.png';
+        if (world) {
+            unmuteAllSounds();
+        }
+    }
+}
+
+function muteAllSounds() {
+    if (world) {
+        world.coinSound.muted = true;
+        world.winSound.muted = true;
+        world.loseSound.muted = true;
+        world.character.hurtSound.muted = true;
+        world.character.runSound.muted = true;
+        world.character.jumpSound.muted = true;
+        world.endboss.attackSound.muted = true;
+        world.throwableObjects.forEach(bottle => {
+            bottle.splashSound.muted = true;
+        });
+        world.level.enemies.forEach(enemy => {
+            if (enemy.dieSound) {
+                enemy.dieSound.muted = true;
+            }
+        });
+    }
+}
+
+function unmuteAllSounds() {
+    if (world) {
+        world.coinSound.muted = false;
+        world.winSound.muted = false;
+        world.loseSound.muted = false;
+        world.character.hurtSound.muted = false;
+        world.character.runSound.muted = false;
+        world.character.jumpSound.muted = false;
+        world.endboss.attackSound.muted = false;
+        world.throwableObjects.forEach(bottle => {
+            bottle.splashSound.muted = false;
+        });
+        world.level.enemies.forEach(enemy => {
+            if (enemy.dieSound) {
+                enemy.dieSound.muted = false;
+            }
+        });
     }
 }

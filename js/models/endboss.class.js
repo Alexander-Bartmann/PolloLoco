@@ -51,6 +51,7 @@ class Endboss extends MoveableObject {
 
     animationInterval;
     movementInterval;
+    attackSound = new Audio('audio/chicken-attack.mp3');
 
     constructor() {
         super();
@@ -63,6 +64,9 @@ class Endboss extends MoveableObject {
         this.img = this.imageCache[this.images_walk[0]];
         
         this.x = 2500;
+    }
+
+    startAnimations() {
         this.animate();
     }
 
@@ -101,19 +105,18 @@ class Endboss extends MoveableObject {
             if (!this.isDead() && !this.isHurt() && !this.attackCooldown) {
                 this.startAttack();
             }
-        }, 1000); // Überprüft alle 4 Sekunden, ob ein Angriff gestartet werden soll
+        }, 1000); 
     }
 
     startAttack() {
         this.isAttacking = true;
         this.attackCooldown = true;
+        this.attackSound.play();
         
-        // Attack-Animation für 1.6 Sekunden abspielen
         setTimeout(() => {
             this.isAttacking = false;
         }, 1600);
 
-        // Cooldown von 8 Sekunden, bevor der nächste Angriff möglich ist
         setTimeout(() => {
             this.attackCooldown = false;
         }, 8000);

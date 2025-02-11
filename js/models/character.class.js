@@ -43,6 +43,10 @@ class Character extends MoveableObject{
     world;
     movementInterval;
     animationInterval;
+    hurtSound = new Audio('audio/chatcter-hurt.mp3');
+    runSound = new Audio('audio/running.mp3');
+    jumpSound = new Audio('audio/jump.mp3');   
+    
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -95,11 +99,14 @@ class Character extends MoveableObject{
             }, deathAnimationTime);
         } else if (this.isHurt()){
             this.playAnimation(this.images_hurt);
+            this.hurtSound.play();
         } else if(this.isAboveGround()){
             this.playAnimation(this.images_jumping);
+            this.jumpSound.play();
         } else {
             if(this.world.keyboard.right || this.world.keyboard.left){
                 this.playAnimation(this.images_walk);
+                this.runSound.play();
             }
         } 
     }

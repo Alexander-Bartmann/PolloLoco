@@ -18,6 +18,7 @@ class ThrowableObject extends MoveableObject {
     isSplashing = false;
     hasDamaged = false;
     throwInterval; 
+    splashSound = new Audio('audio/bottle break.mp3'); 
 
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
@@ -29,6 +30,7 @@ class ThrowableObject extends MoveableObject {
         this.width = 50;
         this.throw();
         this.animate();
+        this.splashSound.muted = isMuted;
     }
 
     throw() {
@@ -45,6 +47,7 @@ class ThrowableObject extends MoveableObject {
         setInterval(() => {
             if (this.isSplashing) {
                 this.playAnimationOnce(this.images_bottleSplash, () => {
+                    
                     this.toDelete = true;
                 });
             } else {
@@ -56,6 +59,9 @@ class ThrowableObject extends MoveableObject {
     splash() {
         this.isSplashing = true;
         this.speedY = 0;
+        if (!isMuted) {
+            this.splashSound.play();
+        }
         clearInterval(this.throwInterval);
     }
 

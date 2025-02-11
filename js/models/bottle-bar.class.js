@@ -21,7 +21,6 @@ class BottleBar extends DrawableObject {
     }
 
     setPercentage(bottles) {
-        // Berechne Prozent basierend auf Flaschenpaaren (2 Flaschen = 20%)
         this.percentage = Math.floor(bottles / 2) * 20;
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];

@@ -17,6 +17,9 @@ class World {
     gameWonImage = new Image();
     gameEndTimeout = false;
     endScreenVisible = false;
+    coinSound = new Audio('audio/catch coin.wav');
+    winSound = new Audio('audio/win.mp3');
+    loseSound = new Audio('audio/lose.wav');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -45,7 +48,9 @@ class World {
         this.initializeBottles();
         this.character.startAnimations();
         this.level.enemies.forEach(enemy => {
-            if (enemy.startAnimations) {
+            if (enemy instanceof Endboss) {
+                enemy.startAnimations();
+            } else if (enemy.startAnimations) {
                 enemy.startAnimations();
             }
         });
@@ -80,6 +85,7 @@ class World {
     checkThrowObjects(){
         if(this.keyboard.r && this.character.bottles > 0){
             let bottle = new ThrowableObject(this.character.x, this.character.y);
+            bottle.splashSound.muted = isMuted;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;
             this.bottlebar.setPercentage(this.character.bottles);
@@ -133,6 +139,7 @@ class World {
             this.coins.splice(index, 1);
             this.character.coins += 10;
             this.coinbar.setPercentage(this.character.coins);
+            this.coinSound.play();
         }
     }
 
@@ -182,8 +189,10 @@ class World {
             this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
             if (this.character.isDead()) {
                 this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
+                this.loseSound.play();
             } else if (this.endboss.isDead()) {
                 this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
+                this.winSound.play();
             }
             setTimeout(() => {
                 this.restartButton.style.display = 'block';
