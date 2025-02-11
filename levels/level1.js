@@ -1,3 +1,11 @@
+/**
+ * @constant
+ * @type {Level}
+ * @description First level of the game containing enemies, clouds and background objects
+ * @property {Array<Enemy>} enemies - Array of enemy objects (chickens and endboss)
+ * @property {Array<Cloud>} clouds - Array of cloud objects for parallax effect
+ * @property {Array<BackgroundObject>} backgroundObjects - Array of background layers
+ */
 const level1 = new Level([
     new Chicken(), 
     new Chicken(),

@@ -1,4 +1,9 @@
+/**
+ * Class representing the bottle collection status bar
+ * @extends DrawableObject
+ */
 class BottleBar extends DrawableObject {
+    /** @type {string[]} - Array of image paths for different bottle states */
     images = [
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/0.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/20.png',
@@ -8,8 +13,12 @@ class BottleBar extends DrawableObject {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png'
     ];
 
+    /** @type {number} - Current percentage value of collected bottles */
     percentage = 0;
 
+    /**
+     * Creates a new BottleBar instance and initializes it
+     */
     constructor() {
         super();
         this.loadImages(this.images);
@@ -20,12 +29,20 @@ class BottleBar extends DrawableObject {
         this.setPercentage(0);
     }
 
+    /**
+     * Updates the bottle bar's percentage based on collected bottles
+     * @param {number} bottles - Number of collected bottles
+     */
     setPercentage(bottles) {
         this.percentage = Math.floor(bottles / 2) * 20;
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Determines which image to display based on current percentage
+     * @returns {number} Index of the image to display
+     */
     resolveImageIndex() {
         if (this.percentage >= 100) {
             return 5;

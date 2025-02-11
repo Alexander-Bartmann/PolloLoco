@@ -1,19 +1,33 @@
+/**
+ * Class representing a normal chicken enemy
+ * @extends MoveableObject
+ */
 class Chicken extends MoveableObject {
+    /** @type {number} - Vertical position of the chicken */
     y = 350;
+    /** @type {number} - Height of the chicken sprite */
     height = 80;
+    /** @type {number} - Width of the chicken sprite */
     width = 80;
+    /** @type {boolean} - Indicates if chicken is dead */
     isDead = false;
+    /** @type {string[]} - Walking animation image paths */
     images_walk = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
     
+    /** @type {string[]} - Dead state image path */
     images_dead = [
         'img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
     ];
+    /** @type {HTMLAudioElement} - Sound effect for chicken death */
     dieSound = new Audio('audio/chicken-dead.mp3'); 
 
+    /**
+     * Creates a new chicken with random position and speed
+     */
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.images_walk);
@@ -23,6 +37,9 @@ class Chicken extends MoveableObject {
         this.animate();      
     }
 
+    /**
+     * Starts the chicken's movement and animation
+     */
     animate() {
         setInterval(() => {
             if (!this.isDead) {
@@ -37,6 +54,9 @@ class Chicken extends MoveableObject {
         }, 200);
     }
 
+    /**
+     * Handles the death state of the chicken
+     */
     die() {
         this.isDead = true;
         this.img = this.imageCache[this.images_dead[0]];

@@ -1,13 +1,21 @@
+/**
+ * Shows the impressum (legal notice) by removing the d-none class
+ */
 function showImpressum() {
     document.getElementById('impressum').classList.remove('d-none');
 }
 
+/**
+ * Hides the impressum (legal notice) by adding the d-none class
+ */
 function closeImpressum() {
     document.getElementById('impressum').classList.add('d-none');
 }
 
-
-
+/**
+ * Event listener for keydown events to handle keyboard controls
+ * @param {KeyboardEvent} e - The keyboard event
+ */
 window.addEventListener("keydown", (e) => {
     if (e.code === "ArrowRight" || e.code === "KeyD") {
         keyboard.right = true;
@@ -29,6 +37,10 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
+/**
+ * Event listener for keyup events to handle keyboard controls
+ * @param {KeyboardEvent} e - The keyboard event
+ */
 window.addEventListener("keyup", (e) => {
     if (e.code === "ArrowRight" || e.code === "KeyD") {
         keyboard.right = false;
@@ -50,6 +62,7 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
+// Fullscreen change event listeners
 document.addEventListener('fullscreenchange', adjustFullscreenSize);
 document.addEventListener('webkitfullscreenchange', adjustFullscreenSize);
 document.addEventListener('mozfullscreenchange', adjustFullscreenSize);

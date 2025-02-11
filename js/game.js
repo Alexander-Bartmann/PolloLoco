@@ -1,14 +1,25 @@
+/** @type {HTMLCanvasElement} */
 let canvas;
+/** @type {World} */
 let world;
+/** @type {Keyboard} */
 let keyboard = new Keyboard();
+/** @type {boolean} */
 let isFullscreen = false;
+/** @type {boolean} */
 let isMuted = false;
 
+/**
+ * Initializes the game by setting up initial state and starting screen
+ */
 function initGame() {
     isMuted = localStorage.getItem('isMuted') === 'true';
     initStartScreen();
 }
 
+/**
+ * Initializes the start screen and sets up initial UI elements
+ */
 function initStartScreen() {
     document.getElementById('gameContainer').innerHTML = initStartscreenHtml();
     checkOrientation();
@@ -16,6 +27,9 @@ function initStartScreen() {
     audioButton.src = isMuted ? 'img/10_icons/ton-aus.png' : 'img/10_icons/lautstarke-des-lautsprechers.png';
 }
 
+/**
+ * Starts the game by initializing canvas and world
+ */
 function startGame() {
     document.getElementById('gameContainer').innerHTML = renderCanvasTemplate();
     canvas = document.getElementById('canvas');
@@ -26,6 +40,9 @@ function startGame() {
     }
 }
 
+/**
+ * Restarts the game by stopping current world and reinitializing
+ */
 function restartGame() {
     if (world) {
         world.stopGame();
@@ -39,11 +56,17 @@ function restartGame() {
     }
 }
 
+/**
+ * Initializes the game world and mobile controls
+ */
 function init() {
     world = new World(canvas, keyboard);
     initMobileControls();
 }
 
+/**
+ * Closes the info dialog if present
+ */
 function closeInfo() {
     const infoDialog = document.querySelector('.info-dialog');
     if (infoDialog) {
@@ -51,10 +74,16 @@ function closeInfo() {
     }
 }
 
+/**
+ * Reloads the entire game page
+ */
 function reloadGame() {
     location.reload();
 }
 
+/**
+ * Toggles fullscreen mode for the game container
+ */
 function fullscreen() {
     let gameContainer = document.getElementById('gameContainer');
     let fullscreenButton = document.querySelector('.fullscreen');
@@ -67,6 +96,11 @@ function fullscreen() {
     isFullscreen = !isFullscreen;
 }
 
+/**
+ * Enables fullscreen mode
+ * @param {HTMLElement} gameContainer - The game container element
+ * @param {HTMLImageElement} fullscreenButton - The fullscreen button element
+ */
 function fullScreenTrue(gameContainer, fullscreenButton) {
     if (gameContainer.requestFullscreen) {
         gameContainer.requestFullscreen();
@@ -78,6 +112,10 @@ function fullScreenTrue(gameContainer, fullscreenButton) {
     fullscreenButton.src = 'img/10_icons/minimieren.png';
 }
 
+/**
+ * Disables fullscreen mode
+ * @param {HTMLImageElement} fullscreenButton - The fullscreen button element
+ */
 function fullScreenFalse(fullscreenButton) {
     if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -89,6 +127,9 @@ function fullScreenFalse(fullscreenButton) {
     fullscreenButton.src = 'img/10_icons/vollbild.png';
 }
 
+/**
+ * Adjusts the size of game elements based on fullscreen state
+ */
 function adjustFullscreenSize() {
     let gameContainer = document.getElementById('gameContainer');
     let canvas = document.getElementById('canvas');
@@ -101,6 +142,12 @@ function adjustFullscreenSize() {
     }
 }
 
+/**
+ * Sets fullscreen dimensions for game elements
+ * @param {HTMLElement} gameContainer - The game container element
+ * @param {HTMLCanvasElement} canvas - The game canvas element
+ * @param {HTMLElement} startScreen - The start screen element
+ */
 function fullScreenSizeTrue(gameContainer, canvas, startScreen) {
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -118,6 +165,12 @@ function fullScreenSizeTrue(gameContainer, canvas, startScreen) {
     }
 }
 
+/**
+ * Resets dimensions to default for game elements
+ * @param {HTMLElement} gameContainer - The game container element
+ * @param {HTMLCanvasElement} canvas - The game canvas element
+ * @param {HTMLElement} startScreen - The start screen element
+ */
 function fullScreenSizeFalse(gameContainer, canvas, startScreen) {
     gameContainer.style.width = '720px';
     gameContainer.style.height = '480px';
@@ -132,6 +185,9 @@ function fullScreenSizeFalse(gameContainer, canvas, startScreen) {
     }
 }
 
+/**
+ * Checks device orientation and sets up orientation handlers if on mobile
+ */
 function checkOrientation() {
     if (isMobile()) {
         handleMobileOrientation();
@@ -140,6 +196,9 @@ function checkOrientation() {
     }
 }
 
+/**
+ * Handles orientation changes on mobile devices
+ */
 function handleMobileOrientation() {
     const gameContainer = document.getElementById('gameContainer');
     
@@ -154,6 +213,9 @@ function handleMobileOrientation() {
     }
 }
 
+/**
+ * Displays the rotate device message on mobile devices
+ */
 function showRotateMessage() {
     if (!window.matchMedia('(pointer: coarse)').matches) {
         return;
@@ -173,6 +235,9 @@ function showRotateMessage() {
     rotateMessage.style.display = 'block';
 }
 
+/**
+ * Hides the rotate device message
+ */
 function hideRotateMessage() {
     const rotateMessage = document.querySelector('.rotate-message');
     if (rotateMessage) {
@@ -180,11 +245,18 @@ function hideRotateMessage() {
     }
 }
 
+/**
+ * Checks if the current device is a mobile device
+ * @returns {boolean} True if device is mobile, false otherwise
+ */
 function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
            || window.matchMedia("(max-width: 768px)").matches;
 }
 
+/**
+ * Initializes touch controls for mobile devices
+ */
 function initMobileControls() {
     document.querySelectorAll('.dpad button').forEach(button => {
         button.addEventListener('touchstart', handleTouchStart);
@@ -198,6 +270,10 @@ function initMobileControls() {
     }
 }
 
+/**
+ * Handles touch start events for mobile controls
+ * @param {TouchEvent} e - The touch event object
+ */
 function handleTouchStart(e) {
     e.preventDefault();
     const element = e.currentTarget;
@@ -220,6 +296,10 @@ function handleTouchStart(e) {
     }
 }
 
+/**
+ * Handles touch end events for mobile controls
+ * @param {TouchEvent} e - The touch event object
+ */
 function handleTouchEnd(e) {
     const element = e.currentTarget;
     
@@ -241,6 +321,9 @@ function handleTouchEnd(e) {
     }
 }
 
+/**
+ * Toggles audio mute state for all game sounds
+ */
 function audio() {
     isMuted = !isMuted;
     localStorage.setItem('isMuted', isMuted);
@@ -259,6 +342,9 @@ function audio() {
     }
 }
 
+/**
+ * Mutes all game sounds
+ */
 function muteAllSounds() {
     if (world) {
         world.coinSound.muted = true;
@@ -279,6 +365,9 @@ function muteAllSounds() {
     }
 }
 
+/**
+ * Unmutes all game sounds
+ */
 function unmuteAllSounds() {
     if (world) {
         world.coinSound.muted = false;

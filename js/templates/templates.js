@@ -1,3 +1,7 @@
+/**
+ * Renders the HTML template for the game canvas and mobile controls
+ * @returns {string} HTML string containing canvas and mobile control elements
+ */
 function renderCanvasTemplate() {
     return `
         <div class="game">
@@ -16,6 +20,10 @@ function renderCanvasTemplate() {
         `;
 }
 
+/**
+ * Renders the HTML template for the start screen
+ * @returns {string} HTML string containing start screen elements
+ */
 function initStartscreenHtml() {
     return `
         <div id="startScreen" class="startScreen">
@@ -28,6 +36,10 @@ function initStartscreenHtml() {
     `;
 }
 
+/**
+ * Shows the info dialog with game controls
+ * Injects the info dialog HTML into the game container
+ */
 function showInfo() {
     const infoDialog = `
         <div class="info-dialog">
