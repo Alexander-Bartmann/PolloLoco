@@ -5,6 +5,8 @@ class Endboss extends MoveableObject {
     y = 45;
     speed = 0.3;
     hurtTimeout = false;
+    isAttacking = false;
+    attackCooldown = false;
 
     images_walk = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -67,6 +69,7 @@ class Endboss extends MoveableObject {
     animate() {
         this.startAnimationInterval();
         this.startMovementInterval();
+        this.startAttackInterval();
     }
 
     startAnimationInterval() {
@@ -75,6 +78,8 @@ class Endboss extends MoveableObject {
                 this.handleDeathAnimation();
             } else if (this.isHurt()) {
                 this.handleHurtAnimation();
+            } else if (this.isAttacking) {
+                this.playAnimation(this.images_attack);
             } else if (this.alert) {
                 this.playAnimation(this.images_alert);
             } else {
@@ -89,6 +94,29 @@ class Endboss extends MoveableObject {
                 this.x -= this.speed;
             }
         }, 1000 / 60);
+    }
+
+    startAttackInterval() {
+        setInterval(() => {
+            if (!this.isDead() && !this.isHurt() && !this.attackCooldown) {
+                this.startAttack();
+            }
+        }, 1000); // Überprüft alle 4 Sekunden, ob ein Angriff gestartet werden soll
+    }
+
+    startAttack() {
+        this.isAttacking = true;
+        this.attackCooldown = true;
+        
+        // Attack-Animation für 1.6 Sekunden abspielen
+        setTimeout(() => {
+            this.isAttacking = false;
+        }, 1600);
+
+        // Cooldown von 8 Sekunden, bevor der nächste Angriff möglich ist
+        setTimeout(() => {
+            this.attackCooldown = false;
+        }, 8000);
     }
 
     handleDeathAnimation() {
