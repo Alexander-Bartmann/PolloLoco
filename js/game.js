@@ -62,10 +62,14 @@ function renderCanvasTemplate() {
         <div class="game">
             <canvas id="canvas" width="720" height="480"></canvas>
             <div class="mobile-controls">
-                <img src="img/10_icons/linker-pfeil.png" id="leftButton" alt="Left">
-                <img src="img/10_icons/hoch.png" id="jumpButton" alt="Jump">
-                <img src="img/10_icons/aufwartspfeil.png" id="throwButton" alt="Throw">
-                <img src="img/10_icons/rechter-pfeil.png" id="rightButton" alt="Right">
+                <div class="dpad">
+                    <button class="up" data-direction="up">▲</button>
+                    <div class="horizontal-buttons">
+                        <button class="left" data-direction="left">◀</button>
+                        <button class="right" data-direction="right">▶</button>
+                    </div>
+                </div>
+                <button class="bottle-mobil-throw" data-action="throw"><img src="img/6_salsa_bottle/salsa_bottle.png"></button>
             </div>
         </div>
         `;
@@ -238,32 +242,59 @@ function isMobile() {
 }
 
 function initMobileControls() {
-    const leftBtn = document.getElementById('leftButton');
-    const rightBtn = document.getElementById('rightButton');
-    const jumpBtn = document.getElementById('jumpButton');
-    const throwBtn = document.getElementById('throwButton');
-
-    leftBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.left = true;
+    // D-Pad Controls
+    document.querySelectorAll('.dpad button').forEach(button => {
+        button.addEventListener('touchstart', handleTouchStart);
+        button.addEventListener('touchend', handleTouchEnd);
     });
-    leftBtn.addEventListener('touchend', () => keyboard.left = false);
 
-    rightBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.right = true;
-    });
-    rightBtn.addEventListener('touchend', () => keyboard.right = false);
+    // Bottle Button Control
+    const bottleButton = document.querySelector('.bottle-mobil-throw');
+    if (bottleButton) {
+        bottleButton.addEventListener('touchstart', handleTouchStart);
+        bottleButton.addEventListener('touchend', handleTouchEnd);
+    }
+}
 
-    jumpBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        keyboard.space = true;
-    });
-    jumpBtn.addEventListener('touchend', () => keyboard.space = false);
-
-    throwBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+function handleTouchStart(e) {
+    e.preventDefault();
+    const element = e.currentTarget;
+    
+    if (element.classList.contains('bottle-mobil-throw')) {
         keyboard.r = true;
-    });
-    throwBtn.addEventListener('touchend', () => keyboard.r = false);
+    } else {
+        const direction = element.dataset.direction;
+        switch(direction) {
+            case 'left':
+                keyboard.left = true;
+                break;
+            case 'right':
+                keyboard.right = true;
+                break;
+            case 'up':
+                keyboard.space = true;
+                break;
+        }
+    }
+}
+
+function handleTouchEnd(e) {
+    const element = e.currentTarget;
+    
+    if (element.classList.contains('bottle-mobil-throw')) {
+        keyboard.r = false;
+    } else {
+        const direction = element.dataset.direction;
+        switch(direction) {
+            case 'left':
+                keyboard.left = false;
+                break;
+            case 'right':
+                keyboard.right = false;
+                break;
+            case 'up':
+                keyboard.space = false;
+                break;
+        }
+    }
 }
