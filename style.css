@@ -466,8 +466,30 @@ button:active {
     align-self: flex-end;
 }
 
-.bottle-mobil-throw img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
+/* Mobile Steuerelemente standardmäßig ausblenden */
+.dpad, .bottle-mobil-throw {
+    display: none;
+}
+
+/* Zeige Steuerelemente nur im Landscape-Modus auf mobilen Geräten */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .dpad, .bottle-mobil-throw {
+        display: flex;
+    }
+    
+    .mobile-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        pointer-events: all;
+        z-index: 100;
+        bottom: 20px; /* Abstand vom unteren Rand */
+    }
+}
+
+/* Steuerelemente im Portrait-Modus ausblenden */
+@media screen and (orientation: portrait) {
+    .dpad, .bottle-mobil-throw {
+        display: none;
+    }
 }
