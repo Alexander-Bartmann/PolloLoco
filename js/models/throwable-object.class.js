@@ -19,6 +19,12 @@ class ThrowableObject extends MoveableObject {
     hasDamaged = false;
     throwInterval; 
     splashSound = new Audio('audio/bottle break.mp3'); 
+    offset = {
+        top: 10,     
+        bottom: 10,   
+        left: 10,     
+        right: 10     
+    };
 
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');

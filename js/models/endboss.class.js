@@ -7,6 +7,12 @@ class Endboss extends MoveableObject {
     hurtTimeout = false;
     isAttacking = false;
     attackCooldown = false;
+    offset = {
+        top: 50,
+        bottom: 10,
+        left: 40,
+        right: 40
+    };
 
     images_walk = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -59,10 +65,8 @@ class Endboss extends MoveableObject {
         this.loadImages(this.images_alert);
         this.loadImages(this.images_attack);
         this.loadImages(this.images_hurt);
-        this.loadImages(this.images_dead);
-        
-        this.img = this.imageCache[this.images_walk[0]];
-        
+        this.loadImages(this.images_dead);     
+        this.img = this.imageCache[this.images_walk[0]];        
         this.x = 2500;
     }
 

@@ -4,6 +4,11 @@ let keyboard = new Keyboard();
 let isFullscreen = false;
 let isMuted = false;
 
+function initGame() {
+    isMuted = localStorage.getItem('isMuted') === 'true';
+    initStartScreen();
+}
+
 function initStartScreen() {
     document.getElementById('gameContainer').innerHTML = initStartscreenHtml();
     checkOrientation();
@@ -21,39 +26,22 @@ function startGame() {
     }
 }
 
+function restartGame() {
+    if (world) {
+        world.stopGame();
+    }
+    document.getElementById('gameContainer').innerHTML = renderCanvasTemplate();
+    canvas = document.getElementById('canvas');
+    init();
+    world.startGame();
+    if (isMuted) {
+        muteAllSounds();
+    }
+}
+
 function init() {
     world = new World(canvas, keyboard);
     initMobileControls();
-}
-
-function initStartscreenHtml() {
-    return `
-        <div id="startScreen" class="startScreen">
-            <img src="img/9_intro_outro_screens/start/startscreen_2.png" class="start-img">
-            <img src="img/10_icons/play.png" onclick="startGame()" class="play-button">
-            <img src="img/10_icons/die-info.png" onclick="showInfo()" class="info-button">
-            <img src="img/10_icons/vollbild.png" onclick="fullscreen()" class="fullscreen">
-            <img src="img/10_icons/ton-aus.png" onclick="audio()" class="audio">
-        </div>
-    `;
-}
-
-function showInfo() {
-    const infoDialog = `
-        <div class="info-dialog">
-            <div class="info-content">
-                <h2>Steuerung</h2>
-                <ul>
-                    <li>← or A = Left</li>
-                    <li>→ or D = Right</li>
-                    <li>Space = Jump</li>
-                    <li>R = Throw</li>
-                </ul>
-                <button onclick="closeInfo()" class="btn">Close</button>
-            </div>
-        </div>
-    `;
-    document.getElementById('gameContainer').insertAdjacentHTML('beforeend', infoDialog);
 }
 
 function closeInfo() {
@@ -61,24 +49,6 @@ function closeInfo() {
     if (infoDialog) {
         infoDialog.remove();
     }
-}
-
-function renderCanvasTemplate() {
-    return `
-        <div class="game">
-            <canvas id="canvas" width="720" height="480"></canvas>
-            <div class="mobile-controls">
-                <div class="dpad">
-                    <button class="up" data-direction="up">▲</button>
-                    <div class="horizontal-buttons">
-                        <button class="left" data-direction="left">◀</button>
-                        <button class="right" data-direction="right">▶</button>
-                    </div>
-                </div>
-                <button class="bottle-mobil-throw" data-action="throw"><img src="img/6_salsa_bottle/salsa_bottle.png"></button>
-            </div>
-        </div>
-        `;
 }
 
 function reloadGame() {
@@ -90,31 +60,34 @@ function fullscreen() {
     let fullscreenButton = document.querySelector('.fullscreen');
 
     if (!isFullscreen) {
-        if (gameContainer.requestFullscreen) {
-            gameContainer.requestFullscreen();
-        } else if (gameContainer.webkitRequestFullscreen) {
-            gameContainer.webkitRequestFullscreen();
-        } else if (gameContainer.msRequestFullscreen) {
-            gameContainer.msRequestFullscreen();
-        }
-        fullscreenButton.src = 'img/10_icons/minimieren.png';
+        fullScreenTrue(gameContainer, fullscreenButton);
     } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        }
-        fullscreenButton.src = 'img/10_icons/vollbild.png';
+        fullScreenFalse(fullscreenButton);
     }
     isFullscreen = !isFullscreen;
 }
 
-document.addEventListener('fullscreenchange', adjustFullscreenSize);
-document.addEventListener('webkitfullscreenchange', adjustFullscreenSize);
-document.addEventListener('mozfullscreenchange', adjustFullscreenSize);
-document.addEventListener('MSFullscreenChange', adjustFullscreenSize);
+function fullScreenTrue(gameContainer, fullscreenButton) {
+    if (gameContainer.requestFullscreen) {
+        gameContainer.requestFullscreen();
+    } else if (gameContainer.webkitRequestFullscreen) {
+        gameContainer.webkitRequestFullscreen();
+    } else if (gameContainer.msRequestFullscreen) {
+        gameContainer.msRequestFullscreen();
+    }
+    fullscreenButton.src = 'img/10_icons/minimieren.png';
+}
+
+function fullScreenFalse(fullscreenButton) {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+    fullscreenButton.src = 'img/10_icons/vollbild.png';
+}
 
 function adjustFullscreenSize() {
     let gameContainer = document.getElementById('gameContainer');
@@ -122,76 +95,42 @@ function adjustFullscreenSize() {
     let startScreen = document.getElementById('startScreen');
 
     if (document.fullscreenElement) {
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        
-        gameContainer.style.width = `${width}px`;
-        gameContainer.style.height = `${height}px`;
-        
-        if (canvas) {
-            canvas.style.width = `${width}px`;
-            canvas.style.height = `${height}px`;
-        }
-        if (startScreen) {
-            startScreen.style.width = `${width}px`;
-            startScreen.style.height = `${height}px`;
-        }
+        fullScreenSizeTrue(gameContainer, canvas, startScreen);
     } else {
-        gameContainer.style.width = '720px';
-        gameContainer.style.height = '480px';
-        
-        if (canvas) {
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-        }
-        if (startScreen) {
-            startScreen.style.width = '100%';
-            startScreen.style.height = '100%';
-        }
+        fullScreenSizeFalse(gameContainer, canvas, startScreen);
     }
 }
 
-window.addEventListener("keydown", (e) => {
-    if (e.code === "ArrowRight" || e.code === "KeyD") {
-        keyboard.right = true;
+function fullScreenSizeTrue(gameContainer, canvas, startScreen) {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    
+    gameContainer.style.width = `${width}px`;
+    gameContainer.style.height = `${height}px`;
+    
+    if (canvas) {
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
     }
-    if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        keyboard.left = true;
+    if (startScreen) {
+        startScreen.style.width = `${width}px`;
+        startScreen.style.height = `${height}px`;
     }
-    if (e.code === "ArrowUp" || e.code === "KeyW") {
-        keyboard.up = true;
-    }
-    if (e.code === "ArrowDown" || e.code === "KeyS") {
-        keyboard.down = true;
-    }
-    if (e.code === "Space") {
-        keyboard.space = true;
-    }
-    if (e.code === "KeyR") {
-        keyboard.r = true;
-    }
-});
+}
 
-window.addEventListener("keyup", (e) => {
-    if (e.code === "ArrowRight" || e.code === "KeyD") {
-        keyboard.right = false;
+function fullScreenSizeFalse(gameContainer, canvas, startScreen) {
+    gameContainer.style.width = '720px';
+    gameContainer.style.height = '480px';
+    
+    if (canvas) {
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
     }
-    if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        keyboard.left = false;
+    if (startScreen) {
+        startScreen.style.width = '100%';
+        startScreen.style.height = '100%';
     }
-    if (e.code === "ArrowUp" || e.code === "KeyW") {
-        keyboard.up = false;
-    }
-    if (e.code === "ArrowDown" || e.code === "KeyS") {
-        keyboard.down = false;
-    }
-    if (e.code === "Space") {
-        keyboard.space = false;
-    }
-    if (e.code === "KeyR") {
-        keyboard.r = false;
-    }
-});
+}
 
 function checkOrientation() {
     if (isMobile()) {
@@ -216,6 +155,10 @@ function handleMobileOrientation() {
 }
 
 function showRotateMessage() {
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+        return;
+    }
+
     let rotateMessage = document.querySelector('.rotate-message');
     if (!rotateMessage) {
         rotateMessage = document.createElement('div');
@@ -300,6 +243,7 @@ function handleTouchEnd(e) {
 
 function audio() {
     isMuted = !isMuted;
+    localStorage.setItem('isMuted', isMuted);
     const audioButton = document.querySelector('.audio');
     
     if (isMuted) {

@@ -101,12 +101,53 @@ button:active {
     height: 480px;
     max-width: calc(100% - 32px);
     background-color: transparent;
+    aspect-ratio: 720/480;
+}
+
+.startScreen, 
+#canvas,
+.game {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+}
+
+@media only screen and (max-width: 720px) {
+    #gameContainer {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Touch-Geräte im Portrait/Landscape-Modus */
+@media (pointer: coarse) and (orientation: portrait) {
+    #gameContainer {
+        transform: rotate(90deg);
+        transform-origin: center;
+        width: 90vh !important;
+        height: 90vw !important;
+    }
+}
+
+@media (pointer: coarse) and (orientation: landscape) {
+    #gameContainer {
+        width: 90vw !important;
+        height: 90vh !important;
+    }
 }
 
 #gameContainer.fullscreen {
     width: 100vw !important;
     height: 100vh !important;
     max-width: none !important;
+}
+
+canvas {
+    display: block;
 }
 
 #gameContainer.fullscreen canvas,
@@ -124,9 +165,6 @@ button:active {
 }
 
 .startScreen {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -149,8 +187,6 @@ button:active {
     position: absolute;
     width: 4.5%;
     height: auto;
-    min-width: 20px;
-    max-width: 32px;
     cursor: pointer;
     transition: transform 0.2s;
     z-index: 2;
@@ -234,28 +270,6 @@ button:active {
     display: none !important;
 }
 
-@media only screen and (max-width: 720px) {
-    #gameContainer {
-        width: 100%;
-        height: calc((100vw - 32px) * (480/720));
-    }
-
-    h1 {
-        display: none;
-    }
-}
-
-@media only screen and (max-height: 480px) {
-    #gameContainer {
-        height: calc(100vh - 32px);
-        width: calc((100vh - 32px) * (720/480));
-    }
-
-    h1 {
-        display: none;
-    }
-}
-
 .rotate-message {
     display: none;
     position: fixed;
@@ -268,149 +282,6 @@ button:active {
     background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 10px;
-}
-
-@media screen and (orientation: portrait) and (max-width: 768px) {
-    body {
-        height: 100vh;
-        width: 100vw;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #gameContainer {
-        transform: rotate(90deg);
-        transform-origin: center;
-        width: 90vh !important;
-        height: 90vw !important;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(90deg);
-    }
-
-    #gameContainer canvas {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-
-    .rotate-message {
-        display: block;
-        position: fixed;
-        z-index: 1001;
-    }
-
-    .game {
-        width: 100%;
-        height: 100%;
-    }
-
-    #canvas {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-@media screen and (orientation: landscape) and (max-width: 768px) {
-    body {
-        height: 100vh;
-        width: 100vw;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #gameContainer {
-        transform: rotate(0deg);
-        width: 90vw !important;
-        height: 90vh !important;
-        margin: 0;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    #gameContainer canvas {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-
-    .rotate-message {
-        display: none;
-    }
-
-    .game {
-        width: 100%;
-        height: 100%;
-    }
-
-    #canvas {
-        width: 90% !important;
-        height: 80% !important;
-        object-fit: contain;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-.game {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-#gameContainer canvas,
-.startScreen,
-.start-img,
-.game,
-.gameContainer canvas {
-    width: 100% !important;
-    height: 100% !important;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    object-fit: contain;
-}
-
-@media screen and (orientation: portrait) and (max-width: 768px) {
-    #gameContainer {
-        transform: rotate(90deg);
-        transform-origin: center;
-        width: 90vh !important;
-        height: 90vw !important;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(90deg);
-    }
-}
-
-@media screen and (orientation: landscape) and (max-width: 768px) {
-    #gameContainer {
-        width: 90vw !important;
-        height: 90vh !important;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
 }
 
 .mobile-controls {
@@ -433,25 +304,6 @@ button:active {
     -webkit-user-select: none;
 }
 
-@media screen and (max-width: 768px) {
-    .mobile-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .info-dialog {
-        width: 80%;
-        padding: 5%;
-    }
-
-    .info-button, .fullscreen, .audio {
-        width: 6%;
-    }
-}
-
 .bottle-mobil-throw {
     position: relative;
     width: 40px;
@@ -470,11 +322,93 @@ button:active {
     display: none;
 }
 
-@media screen and (orientation: landscape) and (max-height: 500px) {
+@media only screen and (max-width: 720px) {
+    canvas , .startScreen{
+        width: 100%;
+    }        
+}
+
+@media only screen and (max-height: 480px){
+    canvas ,.startScreen{
+        height: 100vh;
+    }
+}
+
+@media (pointer: coarse) and (orientation: portrait) {
+    body {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    #gameContainer {
+        transform: rotate(90deg);
+        transform-origin: center;
+        width: 90vh !important;
+        height: 90vw !important;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .dpad, .bottle-mobil-throw {
+        display: none;
+    }
+
+    .rotate-message {
+        display: block;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        width: 150px;
+        height: 150px;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+    }
+}
+
+@media (pointer: coarse) and (orientation: landscape) {
+    body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    #gameContainer {
+        width: 90vw !important;
+        height: 90vh !important;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .rotate-message {
+        display: none;
+    }
+
     .dpad, .bottle-mobil-throw {
         display: flex;
     }
-    
+
     .mobile-controls {
         display: flex;
         justify-content: space-between;
@@ -485,8 +419,56 @@ button:active {
     }
 }
 
-@media screen and (orientation: portrait) {
-    .dpad, .bottle-mobil-throw {
-        display: none;
-    }
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.impressum-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.impressum-link:hover {
+    text-decoration: underline;
+}
+
+.impressum {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.impressum-content {
+    background-color: #A0DDFC;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.impressum-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: "Kablammo", serif;
+}
+
+.impressum-content p {
+    margin: 10px 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
 }

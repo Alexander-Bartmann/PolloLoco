@@ -4,6 +4,7 @@ class Character extends MoveableObject{
     speed = 10;
     coins = 0;
     bottles = 0;
+    isImmune = false;
     images_walk = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -45,8 +46,13 @@ class Character extends MoveableObject{
     animationInterval;
     hurtSound = new Audio('audio/chatcter-hurt.mp3');
     runSound = new Audio('audio/running.mp3');
-    jumpSound = new Audio('audio/jump.mp3');   
-    
+    jumpSound = new Audio('audio/jump.mp3');
+    offset = {
+        top: 120,
+        bottom: 10,
+        left: 20,
+        right: 20
+    };
 
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -62,13 +68,15 @@ class Character extends MoveableObject{
     }
 
     hit() {
-        let currentTime = new Date().getTime();
-        if (currentTime - this.lastHit > 500) {
-            this.energy -= 10;
-            if (this.energy < 0) {
-                this.energy = 0;
-            } else {
-                this.lastHit = currentTime;
+        if (!this.isImmune) {
+            let currentTime = new Date().getTime();
+            if (currentTime - this.lastHit > 500) {
+                this.energy -= 10;
+                if (this.energy < 0) {
+                    this.energy = 0;
+                } else {
+                    this.lastHit = currentTime;
+                }
             }
         }
     }
