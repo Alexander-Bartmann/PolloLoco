@@ -1,7 +1,11 @@
+/**
+ * Class representing the main playable character
+ * @extends MoveableObject
+ */
 class Character extends MoveableObject{
     height = 240;
     y = 80;
-    speed = 10;
+    speed = 5;
     coins = 0;
     bottles = 0;
     isImmune = false;
@@ -41,12 +45,43 @@ class Character extends MoveableObject{
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
+
+    images_idle = [
+        'img/2_character_pepe/1_idle/idle/I-1.png',
+        'img/2_character_pepe/1_idle/idle/I-2.png',
+        'img/2_character_pepe/1_idle/idle/I-3.png',
+        'img/2_character_pepe/1_idle/idle/I-4.png',
+        'img/2_character_pepe/1_idle/idle/I-5.png',
+        'img/2_character_pepe/1_idle/idle/I-6.png',
+        'img/2_character_pepe/1_idle/idle/I-7.png',
+        'img/2_character_pepe/1_idle/idle/I-8.png',
+        'img/2_character_pepe/1_idle/idle/I-9.png',
+        'img/2_character_pepe/1_idle/idle/I-10.png',
+    ];
+
+    images_longIdle = [
+        'img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img/2_character_pepe/1_idle/long_idle/I-20.png',
+    ];
+
     world;
     movementInterval;
     animationInterval;
     hurtSound = new Audio('audio/chatcter-hurt.mp3');
     runSound = new Audio('audio/running.mp3');
     jumpSound = new Audio('audio/jump.mp3');
+    /** @type {number} - Timestamp of last movement */
+    lastMove = new Date().getTime();
+    /** @type {boolean} - Indicates if character is in long idle state */
+    isLongIdle = false;
     offset = {
         top: 120,
         bottom: 10,
@@ -54,19 +89,30 @@ class Character extends MoveableObject{
         right: 20
     };
 
+    /**
+     * Creates a new Character instance and loads all required images
+     */
     constructor(){
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.loadImages(this.images_walk);
         this.loadImages(this.images_jumping);
         this.loadImages(this.images_dead);
         this.loadImages(this.images_hurt);
+        this.loadImages(this.images_idle);
+        this.loadImages(this.images_longIdle);
         this.apllyGravity();
     }
 
+    /**
+     * Starts character animations and movement intervals
+     */
     startAnimations() {
         this.animate();
     }
 
+    /**
+     * Reduces character's energy when hit if not immune
+     */
     hit() {
         if (!this.isImmune) {
             let currentTime = new Date().getTime();
@@ -81,22 +127,40 @@ class Character extends MoveableObject{
         }
     }
 
+    /**
+     * Handles character movement based on keyboard input
+     */
     movement() {
+        const currentTime = new Date().getTime();
         if(this.world.keyboard.right && this.x < this.world.level.level_end_x){
             this.moveRight();
+            this.updateLastMove();
         }
 
         if(this.world.keyboard.left && this.x > 0){
             this.moveLeft();
+            this.updateLastMove();
         }
 
         if(this.world.keyboard.space && !this.isAboveGround()){
             this.jump();
+            this.updateLastMove();
         } 
 
         this.world.camera_x = -this.x + 100; 
     }
 
+    /**
+     * Updates the timestamp of last movement and resets idle state
+     */
+    updateLastMove() {
+        this.lastMove = new Date().getTime();
+        this.isLongIdle = false;
+    }
+
+    /**
+     * Handles all character animations based on current state
+     */
     animation() {
         if(this.isDead()){
             let deathAnimationTime = this.images_dead.length * 100;
@@ -115,10 +179,23 @@ class Character extends MoveableObject{
             if(this.world.keyboard.right || this.world.keyboard.left){
                 this.playAnimation(this.images_walk);
                 this.runSound.play();
+            } else {
+                const idleTime = new Date().getTime() - this.lastMove;
+                if (idleTime > 10000) {
+                    this.playAnimation(this.images_longIdle);
+                    if (!this.isLongIdle) {
+                        this.isLongIdle = true;
+                    }
+                } else if (idleTime > 3000) { 
+                    this.playAnimation(this.images_idle);
+                }
             }
         } 
     }
 
+    /**
+     * Initializes animation and movement intervals
+     */
     animate() {
 
         this.movementInterval = setInterval(() => {
@@ -130,12 +207,30 @@ class Character extends MoveableObject{
         }, 30);
     }
 
+    /**
+     * Stops all running intervals
+     */
     stopAllIntervals() {
         clearInterval(this.animationInterval);
         clearInterval(this.movementInterval);
     }
 
+    /**
+     * Makes the character jump
+     */
     jump() {
         this.speedY = 25;
+    }
+
+    /**
+     * Sets the world reference and updates sound volumes
+     * @param {World} world - The game world instance
+     */
+    setWorld(world) {
+        this.world = world;
+        const volume = world.coinSound.volume;
+        this.hurtSound.volume = volume;
+        this.runSound.volume = volume;
+        this.jumpSound.volume = volume;
     }
 }

@@ -28,11 +28,13 @@ class DrawableObject {
     }
 
     /**
-     * Draws the object on the canvas
+     * Draws the object on the canvas if image is loaded
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
      */
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        if (this.img && this.img.complete) {  // Prüfe ob Bild existiert und geladen ist
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
     }
 
     /**
