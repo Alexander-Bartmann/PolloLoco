@@ -4,7 +4,7 @@
  */
 class Coins extends MoveableObject {
     /** @type {number} - Vertical position of the coin */
-    y = 600;
+    y = 300;
     /** @type {number} - Height of the coin sprite */
     height = 80;
     /** @type {number} - Width of the coin sprite */
@@ -16,6 +16,6 @@ class Coins extends MoveableObject {
     constructor() {
         super().loadImage('img/8_coin/coin_1.png');
         this.x = 200 + Math.random() * 2000;
-        this.y = 200 + Math.random() * 100;
+        this.y = 350 + Math.random() * 10; // Vertikale Position auf Höhe der Hühner gesetzt
     }
 }

@@ -149,7 +149,7 @@ class World {
         for (let i = 0; i < 10; i++) {
             let coin = new Coins();
             coin.x = 200 + Math.random() * 2000;
-            coin.y = 50 + Math.random() * 100;
+            coin.y = 120 + Math.random() * 100;
             this.coins.push(coin);
         }
     }
