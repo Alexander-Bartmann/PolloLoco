@@ -27,8 +27,8 @@ class ChickenSmall extends MoveableObject {
     offset = {
         top: 0,
         bottom: 0,
-        left: 5, 
-        right: 5 
+        left: -40,  // Breiter machen für bessere Kollisionserkennung
+        right: -40  // Breiter machen für bessere Kollisionserkennung
     };
 
     /**
@@ -67,5 +67,15 @@ class ChickenSmall extends MoveableObject {
     die() {
         this.isDead = true;
         this.img = this.imageCache[this.images_dead[0]];
+    }
+
+    /**
+     * Checks if the chicken is hit from above and dies
+     * @param {MoveableObject} mo - The object to check collision with
+     */
+    checkIfHitFromAbove(mo) {
+        if (mo.isFallingOn(this)) {
+            this.die();
+        }
     }
 }
