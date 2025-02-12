@@ -154,7 +154,9 @@ class World {
      */
     checkThrowObjects(){
         if(this.keyboard.r && this.character.bottles > 0){
-            let bottle = new ThrowableObject(this.character.x, this.character.y);
+            // Starte die Flasche 100 Pixel tiefer als die Character-Position
+            let throwPositionY = this.character.y + 100;
+            let bottle = new ThrowableObject(this.character.x, throwPositionY);
             bottle.splashSound.muted = isMuted;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;
