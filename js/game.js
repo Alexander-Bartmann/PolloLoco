@@ -49,6 +49,7 @@ function restartGame() {
     }
     document.getElementById('gameContainer').innerHTML = renderCanvasTemplate();
     canvas = document.getElementById('canvas');
+    level1 = initLevel1();
     init();
     world.startGame();
     if (isMuted) {

@@ -37,7 +37,6 @@ class World {
         this.keyboard = keyboard;
         this.gameOverImage.src = 'img/9_intro_outro_screens/game_over/oh no you lost!.png';
         this.gameWonImage.src = 'img/9_intro_outro_screens/win/won_2.png';
-        this.createRestartButton();
         this.draw();
         this.setWorld();
         this.setVolume(0.1);
@@ -60,68 +59,6 @@ class World {
                 bottle.splashSound.volume = volume;
             }
         });
-    }
-
-    /**
-     * Creates and initializes the restart button
-     */
-    createRestartButton() {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.id = 'buttonContainer';
-        buttonContainer.style.position = 'absolute';
-        buttonContainer.style.zIndex = '9999';
-        document.getElementById('gameContainer').appendChild(buttonContainer);
-        
-        // Buttons erstellen
-        const restartBtn = document.createElement('button');
-        restartBtn.className = 'restartButton';
-        restartBtn.innerHTML = 'Restart Game';
-        restartBtn.onclick = () => this.resetGame();
-        
-        const lobbyBtn = document.createElement('button');
-        lobbyBtn.className = 'restartButton';
-        lobbyBtn.innerHTML = 'Back to Lobby';
-        lobbyBtn.onclick = () => location.reload();
-        
-        // Buttons zum Container hinzufügen
-        buttonContainer.appendChild(restartBtn);
-        buttonContainer.appendChild(lobbyBtn);
-    }
-
-    resetGame() {
-        // Stop all current game processes
-        this.stopGame();
-        
-        // Reset game state
-        this.character = new Character();
-        this.setWorld();
-        this.camera_x = 0;
-        this.throwableObjects = [];
-        this.coins = [];
-        this.bottles = [];
-        
-        // Reset status bars
-        this.statusbar = new StatusBar();
-        this.coinbar = new CoinBar();
-        this.bottlebar = new BottleBar();
-        
-        // Reset level and enemies
-        this.level = level1;
-        this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        this.endbossStatusBar = new EndbossStatusBar();
-        
-        // Reset game end states
-        this.gameEndTimeout = false;
-        this.endScreenVisible = false;
-        
-        // Hide buttons
-        document.getElementById('buttonContainer').style.display = 'none';
-        document.querySelector('.mobile-controls').style.display = 'flex';
-        
-        // Initialize and start new game
-        this.initializeCoins();
-        this.initializeBottles();
-        this.startGame();
     }
 
     /**
@@ -203,7 +140,6 @@ class World {
      */
     checkThrowObjects(){
         if(this.keyboard.r && this.character.bottles > 0){
-            // Starte die Flasche 100 Pixel tiefer als die Character-Position
             let throwPositionY = this.character.y + 100;
             let bottle = new ThrowableObject(this.character.x, throwPositionY);
             bottle.splashSound.muted = isMuted;
@@ -343,6 +279,7 @@ class World {
         this.gameEndTimeout = true;
         setTimeout(() => {
             this.endScreenVisible = true;
+            showButtonContainer(); // Buttons nach 2 Sekunden anzeigen
         }, 2000);
     }
 
@@ -361,8 +298,6 @@ class World {
             this.winSound.play();
         }        
         
-        // Button Container sofort sichtbar machen
-        document.getElementById('buttonContainer').style.display = 'flex';
         document.querySelector('.mobile-controls').style.display = 'none';
     }
 
@@ -417,7 +352,7 @@ class World {
         }
     }
 
-    /**
+    /**s
      * Flips an image horizontally
      * @param {MovableObject} mo - The object to flip
      */

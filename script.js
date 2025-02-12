@@ -67,3 +67,50 @@ document.addEventListener('fullscreenchange', adjustFullscreenSize);
 document.addEventListener('webkitfullscreenchange', adjustFullscreenSize);
 document.addEventListener('mozfullscreenchange', adjustFullscreenSize);
 document.addEventListener('MSFullscreenChange', adjustFullscreenSize);
+
+/**
+ * Shows the button container
+ */
+function showButtonContainer() {
+    const buttonContainer = document.getElementById('buttonContainer');
+    if (buttonContainer) {
+        buttonContainer.style.display = 'flex';
+    }
+}
+
+/**
+ * Hides the button container
+ */
+function hideButtonContainer() {
+    const buttonContainer = document.getElementById('buttonContainer');
+    if (buttonContainer) {
+        buttonContainer.style.display = 'none';
+    }
+}
+
+/**
+ * Resets the game state and restarts the game
+ */
+function resetGame() {
+    if (world) {
+        world.stopGame();
+    }
+    hideButtonContainer();
+    const mobileControls = document.querySelector('.mobile-controls');
+    if (mobileControls) {
+        mobileControls.style.display = 'flex';
+    }
+    world = null;
+    level1 = initLevel1();
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    world = new World(canvas, keyboard);
+    world.startGame();
+    if (world.character) {
+        world.character.isDeadScreenShown = false;
+    }
+    
+    if (isMuted) {
+        muteAllSounds();
+    }
+}
