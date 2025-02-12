@@ -71,6 +71,17 @@ class MoveableObject extends DrawableObject {
     }
 
     /**
+     * Checks if this object is falling onto another object
+     * @param {MoveableObject} mo - The object to check against
+     * @returns {boolean} True if object is falling onto the other object
+     */
+    isFallingOn(mo) {
+        return this.isAboveX(mo) && 
+               this.isAbove(mo) && 
+               this.speedY < 0;
+    }
+
+    /**
      * Reduces object's energy when hit
      */
     hit() {

@@ -223,6 +223,16 @@ class Character extends MoveableObject{
     }
 
     /**
+     * Makes the character temporarily immune to damage
+     */
+    setImmunity() {
+        this.isImmune = true;
+        setTimeout(() => {
+            this.isImmune = false;
+        }, 500);
+    }
+
+    /**
      * Sets the world reference and updates sound volumes
      * @param {World} world - The game world instance
      */

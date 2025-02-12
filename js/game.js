@@ -150,11 +150,9 @@ function adjustFullscreenSize() {
  */
 function fullScreenSizeTrue(gameContainer, canvas, startScreen) {
     let width = window.innerWidth;
-    let height = window.innerHeight;
-    
+    let height = window.innerHeight;    
     gameContainer.style.width = `${width}px`;
-    gameContainer.style.height = `${height}px`;
-    
+    gameContainer.style.height = `${height}px`;    
     if (canvas) {
         canvas.style.width = `${width}px`;
         canvas.style.height = `${height}px`;
@@ -173,8 +171,7 @@ function fullScreenSizeTrue(gameContainer, canvas, startScreen) {
  */
 function fullScreenSizeFalse(gameContainer, canvas, startScreen) {
     gameContainer.style.width = '720px';
-    gameContainer.style.height = '480px';
-    
+    gameContainer.style.height = '480px';    
     if (canvas) {
         canvas.style.width = '100%';
         canvas.style.height = '100%';
@@ -220,7 +217,6 @@ function showRotateMessage() {
     if (!window.matchMedia('(pointer: coarse)').matches) {
         return;
     }
-
     let rotateMessage = document.querySelector('.rotate-message');
     if (!rotateMessage) {
         rotateMessage = document.createElement('div');
@@ -262,7 +258,6 @@ function initMobileControls() {
         button.addEventListener('touchstart', handleTouchStart);
         button.addEventListener('touchend', handleTouchEnd);
     });
-
     const bottleButton = document.querySelector('.bottle-mobil-throw');
     if (bottleButton) {
         bottleButton.addEventListener('touchstart', handleTouchStart);
@@ -276,8 +271,7 @@ function initMobileControls() {
  */
 function handleTouchStart(e) {
     e.preventDefault();
-    const element = e.currentTarget;
-    
+    const element = e.currentTarget;    
     if (element.classList.contains('bottle-mobil-throw')) {
         keyboard.r = true;
     } else {
@@ -301,8 +295,7 @@ function handleTouchStart(e) {
  * @param {TouchEvent} e - The touch event object
  */
 function handleTouchEnd(e) {
-    const element = e.currentTarget;
-    
+    const element = e.currentTarget;    
     if (element.classList.contains('bottle-mobil-throw')) {
         keyboard.r = false;
     } else {
@@ -327,8 +320,7 @@ function handleTouchEnd(e) {
 function audio() {
     isMuted = !isMuted;
     localStorage.setItem('isMuted', isMuted);
-    const audioButton = document.querySelector('.audio');
-    
+    const audioButton = document.querySelector('.audio');    
     if (isMuted) {
         audioButton.src = 'img/10_icons/ton-aus.png';
         if (world) { 
@@ -354,15 +346,22 @@ function muteAllSounds() {
         world.character.runSound.muted = true;
         world.character.jumpSound.muted = true;
         world.endboss.attackSound.muted = true;
-        world.throwableObjects.forEach(bottle => {
-            bottle.splashSound.muted = true;
-        });
-        world.level.enemies.forEach(enemy => {
-            if (enemy.dieSound) {
-                enemy.dieSound.muted = true;
-            }
-        });
+        muteAllThrowableSounds();
     }
+}
+
+/**
+ * Mutes all throwable object sounds
+ */
+function muteAllThrowableSounds() {
+    world.throwableObjects.forEach(bottle => {
+        bottle.splashSound.muted = true;
+    });
+    world.level.enemies.forEach(enemy => {
+        if (enemy.dieSound) {
+            enemy.dieSound.muted = true;
+        }
+    });
 }
 
 /**
@@ -377,13 +376,20 @@ function unmuteAllSounds() {
         world.character.runSound.muted = false;
         world.character.jumpSound.muted = false;
         world.endboss.attackSound.muted = false;
-        world.throwableObjects.forEach(bottle => {
-            bottle.splashSound.muted = false;
-        });
-        world.level.enemies.forEach(enemy => {
-            if (enemy.dieSound) {
-                enemy.dieSound.muted = false;
-            }
-        });
+        unmuteAllThrowableSounds();
     }
+}
+
+/**
+ * Unmutes all throwable object sounds
+ */
+function unmuteAllThrowableSounds() {
+    world.throwableObjects.forEach(bottle => {
+        bottle.splashSound.muted = false;
+    });
+    world.level.enemies.forEach(enemy => {
+        if (enemy.dieSound) {
+            enemy.dieSound.muted = false;
+        }
+    });
 }

@@ -4,11 +4,11 @@
  */
 class ChickenSmall extends MoveableObject {
     /** @type {number} - Vertical position of the small chicken */
-    y = 380;
+    y = 370;
     /** @type {number} - Height of the small chicken sprite */
-    height = 50;
+    height = 60;
     /** @type {number} - Width of the small chicken sprite */
-    width = 70;
+    width = 80;  // Breiter machen für bessere Kollisionserkennung
     /** @type {boolean} - Indicates if chicken is dead */
     isDead = false;
     /** @type {string[]} - Walking animation image paths */
@@ -23,6 +23,14 @@ class ChickenSmall extends MoveableObject {
         'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ];
 
+    /** @type {Object} - Collision offset values to make hit detection more forgiving */
+    offset = {
+        top: 0,
+        bottom: 0,
+        left: 5, 
+        right: 5 
+    };
+
     /**
      * Creates a new small chicken with random position and speed
      */
@@ -32,6 +40,7 @@ class ChickenSmall extends MoveableObject {
         this.loadImages(this.images_dead);
         this.x = 720 + Math.random() * 500;  
         this.speed = 0.15 + Math.random() * 0.25;
+        this.y = 370;
         this.animate();      
     }
 
