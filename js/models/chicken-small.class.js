@@ -27,8 +27,8 @@ class ChickenSmall extends MoveableObject {
     offset = {
         top: 0,
         bottom: 0,
-        left: -40,  // Breiter machen für bessere Kollisionserkennung
-        right: -40  // Breiter machen für bessere Kollisionserkennung
+        left: -80,  // Breiter machen für bessere Kollisionserkennung
+        right: -80  // Breiter machen für bessere Kollisionserkennung
     };
 
     /**

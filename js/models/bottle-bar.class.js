@@ -34,7 +34,7 @@ class BottleBar extends DrawableObject {
      * @param {number} bottles - Number of collected bottles
      */
     setPercentage(bottles) {
-        this.percentage = Math.floor(bottles) * 20;
+        this.percentage = bottles;
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
@@ -44,15 +44,15 @@ class BottleBar extends DrawableObject {
      * @returns {number} Index of the image to display
      */
     resolveImageIndex() {
-        if (this.percentage >= 100) {
+        if (this.percentage >= 10) {
             return 5;
-        } else if (this.percentage >= 80) {
+        } else if (this.percentage >= 8) {
             return 4;
-        } else if (this.percentage >= 60) {
+        } else if (this.percentage >= 6) {
             return 3;
-        } else if (this.percentage >= 40) {
+        } else if (this.percentage >= 4) {
             return 2;
-        } else if (this.percentage >= 20) {
+        } else if (this.percentage >= 1) {
             return 1;
         } else {
             return 0;
