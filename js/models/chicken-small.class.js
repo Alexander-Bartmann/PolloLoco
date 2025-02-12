@@ -78,4 +78,45 @@ class ChickenSmall extends MoveableObject {
             this.die();
         }
     }
+
+    /**
+     * Checks if this object is colliding with another object
+     * @param {MoveableObject} mo - The object to check collision with
+     * @returns {boolean} True if objects are colliding
+     */
+    isColliding(mo) {
+        return this.x + this.width - (this.offset?.right || 0) > mo.x + (mo.offset?.left || 0) &&
+               this.y + this.height - (this.offset?.bottom || 0) > mo.y + (mo.offset?.top || 0) &&
+               this.x + (this.offset?.left || 0) < mo.x + mo.width - (mo.offset?.right || 0) &&
+               this.y + (this.offset?.top || 0) < mo.y + mo.height - (mo.offset?.bottom || 0);
+    }
+
+    /**
+     * Checks if this object is falling onto another object
+     * @param {MoveableObject} mo - The object to check against
+     * @returns {boolean} True if object is falling onto the other object
+     */
+    isFallingOn(mo) {
+        return this.isAboveX(mo) && 
+               this.isAbove(mo) && 
+               this.speedY < 0;
+    }
+
+    /**
+     * Checks if this object is above another object on X-axis
+     * @param {MoveableObject} mo - The object to check against
+     * @returns {boolean} True if this object is above on X-axis
+     */
+    isAboveX(mo) {
+        return this.x + this.width >= mo.x && this.x <= mo.x + mo.width;
+    }
+
+    /**
+     * Checks if this object is vertically above another object
+     * @param {MoveableObject} mo - The object to check against
+     * @returns {boolean} True if this object is above
+     */
+    isAbove(mo) {
+        return this.y + this.height <= mo.y + mo.height / 2;
+    }
 }
