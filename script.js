@@ -92,24 +92,54 @@ function hideButtonContainer() {
  * Resets the game state and restarts the game
  */
 function resetGame() {
+    stopCurrentGame();
+    resetUI();
+    initializeNewGame();
+    startNewGame();
+}
+
+/**
+ * Stops the current game and sounds
+ */
+function stopCurrentGame() {
     if (world) {
         world.stopGame();
+        world.stopAllSounds();
     }
+}
+
+/**
+ * Resets the UI elements
+ */
+function resetUI() {
     hideButtonContainer();
     const mobileControls = document.querySelector('.mobile-controls');
     if (mobileControls) {
         mobileControls.style.display = 'flex';
     }
+}
+
+/**
+ * Initializes a new game
+ */
+function initializeNewGame() {
     world = null;
     level1 = initLevel1();
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    keyboard = new Keyboard();
     world = new World(canvas, keyboard);
+    world.soundPlayed = false;
+}
+
+/**
+ * Starts the new game
+ */
+function startNewGame() {
     world.startGame();
     if (world.character) {
         world.character.isDeadScreenShown = false;
     }
-    
     if (isMuted) {
         muteAllSounds();
     }

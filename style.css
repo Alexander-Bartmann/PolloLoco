@@ -392,9 +392,9 @@ canvas {
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1000;
-        width: 150px;
-        height: 150px;
-        background-color: rgba(0, 0, 0, 0.8);
+        width: 80%;
+        height: 50vh;
+        background-color: rgba(0, 0, 0);
         padding: 20px;
         border-radius: 10px;
     }

@@ -25,6 +25,7 @@ class World {
     winSound = new Audio('audio/win.mp3');
     loseSound = new Audio('audio/lose.wav');
     intervals = [];
+    soundPlayed = false; // Neue Variable, um zu verfolgen, ob der Sound bereits abgespielt wurde
 
     /**
      * Creates a new World instance
@@ -112,6 +113,33 @@ class World {
             this.endboss.stopAllIntervals();
         }
         this.throwableObjects = [];
+        this.stopAllSounds();
+    }
+
+    /**
+     * Stops all game sounds
+     */
+    stopAllSounds() {
+        this.coinSound.pause();
+        this.coinSound.currentTime = 0;
+        this.winSound.pause();
+        this.winSound.currentTime = 0;
+        this.loseSound.pause();
+        this.loseSound.currentTime = 0;
+        this.character.hurtSound.pause();
+        this.character.hurtSound.currentTime = 0;
+        this.character.runSound.pause();
+        this.character.runSound.currentTime = 0;
+        this.character.jumpSound.pause();
+        this.character.jumpSound.currentTime = 0;
+        this.endboss.attackSound.pause();
+        this.endboss.attackSound.currentTime = 0;
+        this.throwableObjects.forEach(bottle => {
+            if (bottle.splashSound) {
+                bottle.splashSound.pause();
+                bottle.splashSound.currentTime = 0;
+            }
+        });
     }
 
     /**
@@ -132,8 +160,7 @@ class World {
     initializeBottles() {
         for (let i = 0; i < 5; i++) {
             this.bottles.push(new StaticBottle());
-        }
-    }
+        }}
 
     /**
      * Checks if objects should be thrown
@@ -278,8 +305,9 @@ class World {
     drawEndGameTimeout() {
         this.gameEndTimeout = true;
         setTimeout(() => {
+            this.stopGame();
             this.endScreenVisible = true;
-            showButtonContainer(); // Buttons nach 2 Sekunden anzeigen
+            showButtonContainer();
         }, 2000);
     }
 
@@ -288,21 +316,24 @@ class World {
      */
     drawEndScreenVisible() {
         this.ctx.fillStyle = 'black';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);        
-        
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         if (this.character.isDead()) {
             this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
-            this.loseSound.play();
+            if (!this.soundPlayed) {
+                this.loseSound.play();
+                this.soundPlayed = true;
+            }
         } else if (this.endboss.isDead()) {
             this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
-            this.winSound.play();
-        }        
-        
+            if (!this.soundPlayed) {
+                this.winSound.play();
+                this.soundPlayed = true;
+            }
+        }                
         document.querySelector('.mobile-controls').style.display = 'none';
     }
 
-    drawTranslate() {
-        
+    drawTranslate() {        
         this.ctx.translate(this.camera_x, 0);  
         this.ctx.translate(-this.camera_x, 0);        
         this.ctx.translate(this.camera_x, 0);
