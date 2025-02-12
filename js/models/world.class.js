@@ -130,7 +130,7 @@ class World {
      * Initializes collectible bottles
      */
     initializeBottles() {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             this.bottles.push(new StaticBottle());
         }
     }

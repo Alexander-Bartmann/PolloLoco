@@ -34,7 +34,7 @@ class BottleBar extends DrawableObject {
      * @param {number} bottles - Number of collected bottles
      */
     setPercentage(bottles) {
-        this.percentage = Math.floor(bottles / 2) * 20;
+        this.percentage = Math.floor(bottles) * 20;
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
