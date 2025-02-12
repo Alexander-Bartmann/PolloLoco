@@ -9,6 +9,7 @@ class Character extends MoveableObject{
     coins = 0;
     bottles = 0;
     isImmune = false;
+    isJumping = false;
     images_walk = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -203,8 +204,18 @@ class Character extends MoveableObject{
     }
 
     handleJumpingAnimation() {
+        if (!this.isJumping) {
+            this.isJumping = true;
+            this.playJumpAnimationOnce();
+            this.jumpSound.play();
+        }
+    }
+
+    playJumpAnimationOnce() {
         this.playAnimation(this.images_jumping);
-        this.jumpSound.play();
+        setTimeout(() => {
+            this.isJumping = false;
+        }, this.images_jumping.length * 100);
     }
 
     handleIdleOrWalkingAnimation() {

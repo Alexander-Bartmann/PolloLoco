@@ -8,7 +8,7 @@ class ChickenSmall extends MoveableObject {
     /** @type {number} - Height of the small chicken sprite */
     height = 60;
     /** @type {number} - Width of the small chicken sprite */
-    width = 80;  // Breiter machen für bessere Kollisionserkennung
+    width = 80;
     /** @type {boolean} - Indicates if chicken is dead */
     isDead = false;
     /** @type {string[]} - Walking animation image paths */
@@ -27,8 +27,8 @@ class ChickenSmall extends MoveableObject {
     offset = {
         top: 0,
         bottom: 0,
-        left: -80,  // Breiter machen für bessere Kollisionserkennung
-        right: -80  // Breiter machen für bessere Kollisionserkennung
+        left: 0,
+        right: 0
     };
 
     /**
