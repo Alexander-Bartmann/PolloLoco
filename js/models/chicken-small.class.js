@@ -8,7 +8,7 @@ class ChickenSmall extends MoveableObject {
     /** @type {number} - Height of the small chicken sprite */
     height = 50;
     /** @type {number} - Width of the small chicken sprite */
-    width = 50;
+    width = 70;
     /** @type {boolean} - Indicates if chicken is dead */
     isDead = false;
     /** @type {string[]} - Walking animation image paths */

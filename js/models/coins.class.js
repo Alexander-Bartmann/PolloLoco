@@ -4,7 +4,7 @@
  */
 class Coins extends MoveableObject {
     /** @type {number} - Vertical position of the coin */
-    y = 400;
+    y = 600;
     /** @type {number} - Height of the coin sprite */
     height = 80;
     /** @type {number} - Width of the coin sprite */

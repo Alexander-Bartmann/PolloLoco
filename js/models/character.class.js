@@ -5,7 +5,7 @@
 class Character extends MoveableObject{
     height = 240;
     y = 80;
-    speed = 5;
+    speed = 3;
     coins = 0;
     bottles = 0;
     isImmune = false;
@@ -204,7 +204,7 @@ class Character extends MoveableObject{
 
         this.animationInterval = setInterval(() => {
             this.animation();
-        }, 30);
+        }, 90);
     }
 
     /**
