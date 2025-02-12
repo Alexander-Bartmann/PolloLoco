@@ -66,13 +66,62 @@ class World {
      * Creates and initializes the restart button
      */
     createRestartButton() {
-        this.restartButton = document.createElement('button');
-        this.restartButton.id = 'restartButton';
-        this.restartButton.className = 'restartButton';
-        this.restartButton.innerHTML = 'Restart Game';
-        this.restartButton.onclick = () => location.reload();
-        this.restartButton.style.display = 'none';
-        document.getElementById('gameContainer').appendChild(this.restartButton);
+        const buttonContainer = document.createElement('div');
+        buttonContainer.id = 'buttonContainer';
+        buttonContainer.style.position = 'absolute';
+        buttonContainer.style.zIndex = '9999';
+        document.getElementById('gameContainer').appendChild(buttonContainer);
+        
+        // Buttons erstellen
+        const restartBtn = document.createElement('button');
+        restartBtn.className = 'restartButton';
+        restartBtn.innerHTML = 'Restart Game';
+        restartBtn.onclick = () => this.resetGame();
+        
+        const lobbyBtn = document.createElement('button');
+        lobbyBtn.className = 'restartButton';
+        lobbyBtn.innerHTML = 'Back to Lobby';
+        lobbyBtn.onclick = () => location.reload();
+        
+        // Buttons zum Container hinzufügen
+        buttonContainer.appendChild(restartBtn);
+        buttonContainer.appendChild(lobbyBtn);
+    }
+
+    resetGame() {
+        // Stop all current game processes
+        this.stopGame();
+        
+        // Reset game state
+        this.character = new Character();
+        this.setWorld();
+        this.camera_x = 0;
+        this.throwableObjects = [];
+        this.coins = [];
+        this.bottles = [];
+        
+        // Reset status bars
+        this.statusbar = new StatusBar();
+        this.coinbar = new CoinBar();
+        this.bottlebar = new BottleBar();
+        
+        // Reset level and enemies
+        this.level = level1;
+        this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        this.endbossStatusBar = new EndbossStatusBar();
+        
+        // Reset game end states
+        this.gameEndTimeout = false;
+        this.endScreenVisible = false;
+        
+        // Hide buttons
+        document.getElementById('buttonContainer').style.display = 'none';
+        document.querySelector('.mobile-controls').style.display = 'flex';
+        
+        // Initialize and start new game
+        this.initializeCoins();
+        this.initializeBottles();
+        this.startGame();
     }
 
     /**
@@ -303,6 +352,7 @@ class World {
     drawEndScreenVisible() {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);        
+        
         if (this.character.isDead()) {
             this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
             this.loseSound.play();
@@ -310,9 +360,9 @@ class World {
             this.ctx.drawImage(this.gameWonImage, 0, 0, this.canvas.width, this.canvas.height);
             this.winSound.play();
         }        
-        setTimeout(() => {
-            this.restartButton.style.display = 'block';
-        }, 2000);
+        
+        // Button Container sofort sichtbar machen
+        document.getElementById('buttonContainer').style.display = 'flex';
         document.querySelector('.mobile-controls').style.display = 'none';
     }
 

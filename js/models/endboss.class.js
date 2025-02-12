@@ -205,4 +205,12 @@ class Endboss extends MoveableObject {
             this.hurtTimeout = false;
         }, 1500);
     }
+
+    /**
+     * Checks if the endboss is dead
+     * @returns {boolean} True if energy is 0, false otherwise
+     */
+    isDead() {
+        return this.energy <= 0;
+    }
 }
