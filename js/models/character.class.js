@@ -10,6 +10,7 @@ class Character extends MoveableObject{
     bottles = 0;
     isImmune = false;
     isJumping = false;
+    jumpAnimationRunning = false;  // Neue Variable für die Animation
     images_walk = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -141,7 +142,7 @@ class Character extends MoveableObject{
             this.moveLeftAndUpdate();
         }
 
-        if (this.world.keyboard.space && !this.isAboveGround()) {
+        if (this.world.keyboard.space && !this.isAboveGround() && !this.isJumping) {
             this.jumpAndUpdate();
         }
 
@@ -159,8 +160,30 @@ class Character extends MoveableObject{
     }
 
     jumpAndUpdate() {
+        this.isJumping = true;
         this.jump();
         this.updateLastMove();
+        if (!this.jumpAnimationRunning) {
+            this.startJumpAnimation();
+            this.jumpSound.play();
+        }
+    }
+
+    startJumpAnimation() {
+        if (!this.jumpAnimationRunning) {
+            this.jumpAnimationRunning = true;
+            let i = 0;
+            const jumpInterval = setInterval(() => {
+                if (i >= this.images_jumping.length || !this.isAboveGround()) {
+                    clearInterval(jumpInterval);
+                    this.jumpAnimationRunning = false;
+                    this.isJumping = false;
+                } else {
+                    this.img = this.imageCache[this.images_jumping[i]];
+                    i++;
+                }
+            }, 100);
+        }
     }
 
     updateCameraPosition() {
@@ -184,7 +207,7 @@ class Character extends MoveableObject{
         } else if (this.isHurt()) {
             this.handleHurtAnimation();
         } else if (this.isAboveGround()) {
-            this.handleJumpingAnimation();
+            return;
         } else {
             this.handleIdleOrWalkingAnimation();
         }
@@ -204,33 +227,11 @@ class Character extends MoveableObject{
         this.hurtSound.play();
     }
 
-    /**
-     * Handles jumping animation
-     */
-    handleJumpingAnimation() {
-        if (!this.isJumping) {
-            this.isJumping = true;
-            this.playJumpAnimation();
-            this.jumpSound.play();
-        }
-    }
-
-    /**
-     * Plays the jump animation sequence
-     */
-    playJumpAnimation() {
-        let i = 0;
-        const jumpInterval = setInterval(() => {
-            this.img = this.imageCache[this.images_jumping[i]];
-            i++;
-            if (i >= this.images_jumping.length) {
-                clearInterval(jumpInterval);
-                this.isJumping = false;
-            }
-        }, 100);
-    }
-
     handleIdleOrWalkingAnimation() {
+        if (this.isAboveGround()) {
+            // Keine neue Jump-Animation starten, wenn wir bereits springen
+            return;
+        }
         if (this.world.keyboard.right || this.world.keyboard.left) {
             this.playAnimation(this.images_walk);
             this.runSound.play();

@@ -346,6 +346,7 @@ function muteAllSounds() {
         world.character.hurtSound.muted = true;
         world.character.runSound.muted = true;
         world.character.jumpSound.muted = true;
+        world.character.snoreSound.muted = true;
         world.endboss.attackSound.muted = true;
         muteAllThrowableSounds();
     }
@@ -376,6 +377,7 @@ function unmuteAllSounds() {
         world.character.hurtSound.muted = false;
         world.character.runSound.muted = false;
         world.character.jumpSound.muted = false;
+        world.character.snoreSound.muted = false; 
         world.endboss.attackSound.muted = false;
         unmuteAllThrowableSounds();
     }
