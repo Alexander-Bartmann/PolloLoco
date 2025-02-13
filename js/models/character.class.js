@@ -79,6 +79,7 @@ class Character extends MoveableObject{
     hurtSound = new Audio('audio/chatcter-hurt.mp3');
     runSound = new Audio('audio/running.mp3');
     jumpSound = new Audio('audio/jump.mp3');
+    snoreSound = new Audio('audio/snoring.mp3')
     /** @type {number} - Timestamp of last movement */
     lastMove = new Date().getTime();
     /** @type {boolean} - Indicates if character is in long idle state */
@@ -233,6 +234,7 @@ class Character extends MoveableObject{
             this.playAnimation(this.images_longIdle);
             if (!this.isLongIdle) {
                 this.isLongIdle = true;
+                this.snoreSound.play();
             }
         } else if (idleTime > 3000) {
             this.playAnimation(this.images_idle);
@@ -297,5 +299,7 @@ class Character extends MoveableObject{
         this.runSound.currentTime = 0;
         this.jumpSound.pause();
         this.jumpSound.currentTime = 0;
+        this.snoreSound.pause();
+        this.snoreSound.currentTime = 0;
     }
 }
