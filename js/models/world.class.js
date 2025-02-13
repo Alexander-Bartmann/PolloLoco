@@ -26,6 +26,7 @@ class World {
     loseSound = new Audio('audio/lose.wav');
     intervals = [];
     soundPlayed = false; // Neue Variable, um zu verfolgen, ob der Sound bereits abgespielt wurde
+    lastThrowTime = 0; // Neue Variable, um die Zeit des letzten Wurfs zu speichern
 
     /**
      * Creates a new World instance
@@ -162,14 +163,16 @@ class World {
     /**
      * Checks if objects should be thrown
      */
-    checkThrowObjects(){
-        if(this.keyboard.r && this.character.bottles > 0){
+    checkThrowObjects() {
+        const currentTime = new Date().getTime();
+        if (this.keyboard.r && this.character.bottles > 0 && currentTime - this.lastThrowTime > 750) {
             let throwPositionY = this.character.y + 100;
             let bottle = new ThrowableObject(this.character.x, throwPositionY);
             bottle.splashSound.muted = isMuted;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;
             this.bottlebar.setPercentage(this.character.bottles);
+            this.lastThrowTime = currentTime;
         }
     }
 

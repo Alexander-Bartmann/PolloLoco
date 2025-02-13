@@ -93,7 +93,7 @@ class Endboss extends MoveableObject {
         this.loadImages(this.images_hurt);
         this.loadImages(this.images_dead);     
         this.img = this.imageCache[this.images_walk[0]];        
-        this.x = 2500;
+        this.x = 2700;
     }
 
     /**

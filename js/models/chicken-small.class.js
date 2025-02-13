@@ -8,7 +8,7 @@ class ChickenSmall extends MoveableObject {
     /** @type {number} - Height of the small chicken sprite */
     height = 60;
     /** @type {number} - Width of the small chicken sprite */
-    width = 80;
+    width = 60;
     /** @type {boolean} - Indicates if chicken is dead */
     isDead = false;
     /** @type {string[]} - Walking animation image paths */
@@ -25,10 +25,10 @@ class ChickenSmall extends MoveableObject {
 
     /** @type {Object} - Collision offset values to make hit detection more forgiving */
     offset = {
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0
+        top: -20,  
+        bottom: -10,
+        left: -10,
+        right: -10
     };
 
     /**
@@ -99,7 +99,7 @@ class ChickenSmall extends MoveableObject {
     isFallingOn(mo) {
         return this.isAboveX(mo) && 
                this.isAbove(mo) && 
-               this.speedY < 0;
+               this.speedY > 0;
     }
 
     /**
@@ -117,6 +117,6 @@ class ChickenSmall extends MoveableObject {
      * @returns {boolean} True if this object is above
      */
     isAbove(mo) {
-        return this.y + this.height <= mo.y + mo.height / 2;
+        return this.y + this.height <= mo.y + mo.height / 1.5;
     }
 }
