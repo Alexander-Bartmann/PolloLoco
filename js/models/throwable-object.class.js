@@ -97,6 +97,16 @@ class ThrowableObject extends MoveableObject {
     }
 
     /**
+     * Stops the splash sound of the bottle
+     */
+    stopSounds() {
+        if (this.splashSound) {
+            this.splashSound.pause();
+            this.splashSound.currentTime = 0;
+        }
+    }
+
+    /**
      * Applies gravity effect to the bottle's movement
      */
     apllyGravity() {

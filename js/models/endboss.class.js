@@ -213,4 +213,9 @@ class Endboss extends MoveableObject {
     isDead() {
         return this.energy <= 0;
     }
+
+    stopSounds() {
+        this.attackSound.pause();
+        this.attackSound.currentTime = 0;
+    }
 }

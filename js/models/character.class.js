@@ -289,4 +289,13 @@ class Character extends MoveableObject{
         this.runSound.volume = volume;
         this.jumpSound.volume = volume;
     }
+
+    stopSounds() {
+        this.hurtSound.pause();
+        this.hurtSound.currentTime = 0;
+        this.runSound.pause();
+        this.runSound.currentTime = 0;
+        this.jumpSound.pause();
+        this.jumpSound.currentTime = 0;
+    }
 }

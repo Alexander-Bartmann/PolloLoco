@@ -120,26 +120,22 @@ class World {
      * Stops all game sounds
      */
     stopAllSounds() {
+        this.character.stopSounds();
+        this.endboss.stopSounds();
+        this.throwableObjects.forEach(bottle => bottle.stopSounds());
+        this.stopMiscSounds();
+    }
+
+    /**
+     * Stops miscellaneous game sounds
+     */
+    stopMiscSounds() {
         this.coinSound.pause();
         this.coinSound.currentTime = 0;
         this.winSound.pause();
         this.winSound.currentTime = 0;
         this.loseSound.pause();
         this.loseSound.currentTime = 0;
-        this.character.hurtSound.pause();
-        this.character.hurtSound.currentTime = 0;
-        this.character.runSound.pause();
-        this.character.runSound.currentTime = 0;
-        this.character.jumpSound.pause();
-        this.character.jumpSound.currentTime = 0;
-        this.endboss.attackSound.pause();
-        this.endboss.attackSound.currentTime = 0;
-        this.throwableObjects.forEach(bottle => {
-            if (bottle.splashSound) {
-                bottle.splashSound.pause();
-                bottle.splashSound.currentTime = 0;
-            }
-        });
     }
 
     /**
@@ -160,7 +156,8 @@ class World {
     initializeBottles() {
         for (let i = 0; i < 10; i++) {
             this.bottles.push(new StaticBottle());
-        }}
+        }
+    }
 
     /**
      * Checks if objects should be thrown
@@ -276,9 +273,6 @@ class World {
         requestAnimationFrame(() => this.draw());
     }
 
-    /**
-     * Draws all game objects with correct translation
-     */
     drawGameObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
@@ -299,9 +293,6 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
     }
 
-    /**
-     * Initiates the end game timeout
-     */
     drawEndGameTimeout() {
         this.gameEndTimeout = true;
         setTimeout(() => {
@@ -311,9 +302,6 @@ class World {
         }, 2000);
     }
 
-    /**
-     * Draws the end screen (game over or victory)
-     */
     drawEndScreenVisible() {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -383,7 +371,7 @@ class World {
         }
     }
 
-    /**s
+    /**
      * Flips an image horizontally
      * @param {MovableObject} mo - The object to flip
      */
