@@ -276,16 +276,14 @@ class World {
     drawGameObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds); // Wolken vor der Statusleiste zeichnen
         this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusbar);
+        this.addToMap(this.statusbar); // Statusleiste nach den Wolken zeichnen
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlebar);
-        if (this.character.x > this.endboss.x - 720) {
-            this.addToMap(this.endbossStatusBar);
-        }
+        if (this.character.x > this.endboss.x - 720) {this.addToMap(this.endbossStatusBar);}
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
-        this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
         this.addToMap(this.endboss);
         this.addObjectsToMap(this.coins);
@@ -305,8 +303,7 @@ class World {
     drawEndScreenVisible() {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.character.isDead()) {
-            this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
+        if (this.character.isDead()) { this.ctx.drawImage(this.gameOverImage, 0, 0, this.canvas.width, this.canvas.height);
             if (!this.soundPlayed) {
                 this.loseSound.play();
                 this.soundPlayed = true;
@@ -333,9 +330,7 @@ class World {
         this.addToMap(this.statusbar);
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlebar);        
-        if (this.character.x > this.endboss.x - 720) {
-            this.addToMap(this.endbossStatusBar);
-        }  
+        if (this.character.x > this.endboss.x - 720) {this.addToMap(this.endbossStatusBar);}  
     }
 
     drawObjectToMap() {
@@ -362,13 +357,9 @@ class World {
      * @param {MovableObject} mo - The object to draw
      */
     addToMap(mo){
-        if(mo.otherDirection){
-            this.flipImage(mo);
-        }
+        if(mo.otherDirection){this.flipImage(mo);}
         mo.draw(this.ctx);
-        if(mo.otherDirection){            
-            this.flipImageBack(mo);
-        }
+        if(mo.otherDirection){this.flipImageBack(mo);}
     }
 
     /**
