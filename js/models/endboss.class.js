@@ -15,12 +15,16 @@ class Endboss extends MoveableObject {
     originalSpeed = 0.5;
     /** @type {number} - Boosted movement speed */
     boostedSpeed = 1.5;
-    /** @type {boolean} - Indicates if boss is in hurt timeout */
+    /** @type {boolean} - Hurt timeout status */
     hurtTimeout = false;
-    /** @type {boolean} - Indicates if boss is attacking */
+    /** @type {boolean} - Attack status */
     isAttacking = false;
-    /** @type {boolean} - Indicates if attack is in cooldown */
+    /** @type {boolean} - Attack cooldown status */
     attackCooldown = false;
+    /** @type {boolean} - Current hurt state */
+    isHurtState = false;
+    /** @type {number} - Speed increase after being hit (10%) */
+    speedIncrease = 1.1;
     /** @type {Object} - Collision offset values */
     offset = {
         top: 50,
@@ -197,8 +201,11 @@ class Endboss extends MoveableObject {
      * Handles the hurt animation sequence
      */
     handleHurtAnimation() {
+        this.isHurtState = true;
         this.playAnimationOnce(this.images_hurt, () => {
+            this.isHurtState = false;
             this.playAnimation(this.images_walk);
+            this.speed *= this.speedIncrease; // Increase speed by 10%
         });
         this.stopMovement();
     }
@@ -229,6 +236,10 @@ class Endboss extends MoveableObject {
         return this.energy <= 0;
     }
 
+    /**
+     * Stops all character-related sound effects
+     * Resets sound playback to beginning
+     */
     stopSounds() {
         this.attackSound.pause();
         this.attackSound.currentTime = 0;

@@ -2,15 +2,25 @@
  * Class representing the main playable character
  * @extends MoveableObject
  */
-class Character extends MoveableObject{
+class Character extends MoveableObject {
+    /** @type {number} - Height of character sprite */
     height = 240;
+    /** @type {number} - Vertical position */
     y = 80;
+    /** @type {number} - Movement speed */
     speed = 3;
+    /** @type {number} - Collected coins counter */
     coins = 0;
+    /** @type {number} - Collected bottles counter */
     bottles = 0;
+    /** @type {boolean} - Immunity status */
     isImmune = false;
+    /** @type {boolean} - Jump status */
     isJumping = false;
-    jumpAnimationRunning = false; 
+    /** @type {boolean} - Jump animation status */
+    jumpAnimationRunning = false;
+
+    /** @type {string[]} - Walking animation image paths */
     images_walk = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -20,6 +30,7 @@ class Character extends MoveableObject{
         'img/2_character_pepe/2_walk/W-26.png'
     ];
 
+    /** @type {string[]} - Jumping animation image paths */
     images_jumping = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -32,6 +43,7 @@ class Character extends MoveableObject{
         'img/2_character_pepe/3_jump/J-39.png',
     ];
 
+    /** @type {string[]} - Death animation image paths */
     images_dead = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -42,12 +54,14 @@ class Character extends MoveableObject{
         'img/2_character_pepe/5_dead/D-57.png',
     ];
 
+    /** @type {string[]} - Hurt animation image paths */
     images_hurt = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png',
     ];
 
+    /** @type {string[]} - Idle animation image paths */
     images_idle = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -61,6 +75,7 @@ class Character extends MoveableObject{
         'img/2_character_pepe/1_idle/idle/I-10.png',
     ];
 
+    /** @type {string[]} - Long idle animation image paths */
     images_longIdle = [
         'img/2_character_pepe/1_idle/long_idle/I-11.png',
         'img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -74,17 +89,25 @@ class Character extends MoveableObject{
         'img/2_character_pepe/1_idle/long_idle/I-20.png',
     ];
 
+    /** @type {World} - Reference to game world */
     world;
+    /** @type {number} - Movement interval ID */
     movementInterval;
+    /** @type {number} - Animation interval ID */
     animationInterval;
+    /** @type {HTMLAudioElement} - Hurt sound effect */
     hurtSound = new Audio('audio/chatcter-hurt.mp3');
+    /** @type {HTMLAudioElement} - Running sound effect */
     runSound = new Audio('audio/running.mp3');
+    /** @type {HTMLAudioElement} - Jump sound effect */
     jumpSound = new Audio('audio/jump.mp3');
+    /** @type {HTMLAudioElement} - Snoring sound effect */
     snoreSound = new Audio('audio/snoring.mp3')
     /** @type {number} - Timestamp of last movement */
     lastMove = new Date().getTime();
-    /** @type {boolean} - Indicates if character is in long idle state */
+    /** @type {boolean} - Long idle state indicator */
     isLongIdle = false;
+    /** @type {Object} - Collision offset values */
     offset = {
         top: 100,
         bottom: 10,

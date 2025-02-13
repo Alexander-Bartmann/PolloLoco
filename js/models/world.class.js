@@ -1,45 +1,54 @@
 /**
- * Represents the game world containing all game objects and logic
- * @class
- * @property {Character} character - The main player character
- * @property {Level} level - The current game level
- * @property {CanvasRenderingContext2D} ctx - The canvas rendering context
- * @property {HTMLCanvasElement} canvas - The game canvas element
- * @property {Keyboard} keyboard - The keyboard input handler
- * @property {number} camera_x - The camera's x position
- * @property {StatusBar} statusbar - The health status bar
- * @property {CoinBar} coinbar - The coin collection status bar
- * @property {BottleBar} bottlebar - The bottle collection status bar
- * @property {Array<ThrowableObject>} throwableObjects - Array of throwable bottles
- * @property {Array<Coins>} coins - Array of collectible coins
- * @property {Array<StaticBottle>} bottles - Array of collectible bottles
- * @property {Endboss} endboss - The level's final boss
- * @property {EndbossStatusBar} endbossStatusBar - The endboss health bar
+ * Class representing the game world
  */
 class World {
+    /** @type {Character} - The main player character */
     character = new Character();
+    /** @type {Level} - Current game level */
     level = level1;
+    /** @type {CanvasRenderingContext2D} - Canvas rendering context */
     ctx;
+    /** @type {HTMLCanvasElement} - Game canvas element */
     canvas;
+    /** @type {Keyboard} - Keyboard input handler */
     keyboard;
+    /** @type {number} - Camera x position */
     camera_x = 0;
+    /** @type {StatusBar} - Health status bar */
     statusbar = new StatusBar();
+    /** @type {CoinBar} - Coin collection status bar */
     coinbar = new CoinBar();
+    /** @type {BottleBar} - Bottle collection status bar */
     bottlebar = new BottleBar();
+    /** @type {Array<ThrowableObject>} - Throwable bottles array */
     throwableObjects = [];
+    /** @type {Array<Coins>} - Collectible coins array */
     coins = [];
+    /** @type {Array<StaticBottle>} - Collectible bottles array */
     bottles = [];
+    /** @type {Endboss} - Level final boss */
     endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    /** @type {EndbossStatusBar} - Endboss health bar */
     endbossStatusBar = new EndbossStatusBar();
+    /** @type {HTMLImageElement} - Game over screen image */
     gameOverImage = new Image();
+    /** @type {HTMLImageElement} - Game won screen image */
     gameWonImage = new Image();
+    /** @type {boolean} - Game end timeout status */
     gameEndTimeout = false;
+    /** @type {boolean} - End screen visibility status */
     endScreenVisible = false;
+    /** @type {HTMLAudioElement} - Coin collection sound */
     coinSound = new Audio('audio/catch coin.wav');
+    /** @type {HTMLAudioElement} - Win sound effect */
     winSound = new Audio('audio/win.mp3');
+    /** @type {HTMLAudioElement} - Lose sound effect */
     loseSound = new Audio('audio/lose.wav');
+    /** @type {Array<number>} - Game intervals array */
     intervals = [];
+    /** @type {boolean} - Sound played status */
     soundPlayed = false;
+    /** @type {number} - Last throw timestamp */
     lastThrowTime = 0; 
 
     /**
@@ -71,11 +80,7 @@ class World {
         this.character.runSound.volume = volume;
         this.character.jumpSound.volume = volume;
         this.endboss.attackSound.volume = volume;
-        this.throwableObjects.forEach(bottle => {
-            if (bottle.splashSound) {
-                bottle.splashSound.volume = volume;
-            }
-        });
+        this.throwableObjects.forEach(bottle => { if (bottle.splashSound) {bottle.splashSound.volume = volume;}});
     }
 
     /**
@@ -118,9 +123,7 @@ class World {
         this.intervals.forEach(clearInterval);
         this.intervals = [];
         this.character.stopAllIntervals();
-        this.level.enemies.forEach(enemy => {
-            if (enemy.stopAllIntervals) {enemy.stopAllIntervals();}
-        });
+        this.level.enemies.forEach(enemy => { if (enemy.stopAllIntervals) {enemy.stopAllIntervals();}});
         if (this.endboss && this.endboss.stopAllIntervals) {this.endboss.stopAllIntervals();}
         this.throwableObjects = [];
         this.stopAllSounds();
@@ -171,10 +174,11 @@ class World {
 
     /**
      * Checks for keyboard input to throw objects
+     * Only allows throwing if endboss is not in hurt state
      */
     checkThrowObjects() {
         const currentTime = new Date().getTime();
-        if (this.keyboard.r && this.character.bottles > 0 && currentTime - this.lastThrowTime > 750) {
+        if (this.keyboard.r && this.character.bottles > 0 && currentTime - this.lastThrowTime > 2000 && !this.endboss.isHurtState) {
             let throwPositionY = this.character.y + 100;
             let bottle = new ThrowableObject(this.character.x, throwPositionY);
             bottle.splashSound.muted = isMuted;
