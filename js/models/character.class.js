@@ -204,19 +204,30 @@ class Character extends MoveableObject{
         this.hurtSound.play();
     }
 
+    /**
+     * Handles jumping animation
+     */
     handleJumpingAnimation() {
         if (!this.isJumping) {
             this.isJumping = true;
-            this.playJumpAnimationOnce();
+            this.playJumpAnimation();
             this.jumpSound.play();
         }
     }
 
-    playJumpAnimationOnce() {
-        this.playAnimation(this.images_jumping);
-        setTimeout(() => {
-            this.isJumping = false;
-        }, this.images_jumping.length * 100);
+    /**
+     * Plays the jump animation sequence
+     */
+    playJumpAnimation() {
+        let i = 0;
+        const jumpInterval = setInterval(() => {
+            this.img = this.imageCache[this.images_jumping[i]];
+            i++;
+            if (i >= this.images_jumping.length) {
+                clearInterval(jumpInterval);
+                this.isJumping = false;
+            }
+        }, 100);
     }
 
     handleIdleOrWalkingAnimation() {
