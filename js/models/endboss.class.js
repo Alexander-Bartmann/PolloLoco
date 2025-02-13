@@ -10,7 +10,11 @@ class Endboss extends MoveableObject {
     /** @type {number} - Vertical position */
     y = 45;
     /** @type {number} - Movement speed */
-    speed = 0.3;
+    speed = 0.5;
+    /** @type {number} - Original movement speed */
+    originalSpeed = 0.5;
+    /** @type {number} - Boosted movement speed */
+    boostedSpeed = 1.5;
     /** @type {boolean} - Indicates if boss is in hurt timeout */
     hurtTimeout = false;
     /** @type {boolean} - Indicates if boss is attacking */
@@ -159,11 +163,22 @@ class Endboss extends MoveableObject {
         
         setTimeout(() => {
             this.isAttacking = false;
+            this.boostSpeed();
         }, 1600);
 
         setTimeout(() => {
             this.attackCooldown = false;
         }, 8000);
+    }
+
+    /**
+     * Boosts the speed of the endboss for a short duration
+     */
+    boostSpeed() {
+        this.speed = this.boostedSpeed;
+        setTimeout(() => {
+            this.speed = this.originalSpeed;
+        }, 3000);
     }
 
     /**
