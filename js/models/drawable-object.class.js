@@ -50,19 +50,6 @@ class DrawableObject {
 
     }
 
-    drawFrame(ctx){
-        ctx.beginPath();        
-        ctx.lineWidth = "6";
-        ctx.strokeStyle = "red";
-        ctx.rect(
-            this.x + (this.offset?.left || 0),
-            this.y + (this.offset?.top || 0),
-            this.width - (this.offset?.left || 0) - (this.offset?.right || 0),
-            this.height - (this.offset?.top || 0) - (this.offset?.bottom || 0)
-        );
-        ctx.stroke();
-    }
-
     /**
      * Determines which image to display based on current percentage
      * Common implementation for status bars
