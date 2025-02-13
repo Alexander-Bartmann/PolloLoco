@@ -10,6 +10,13 @@ class Coins extends MoveableObject {
     /** @type {number} - Width of the coin sprite */
     width = 80;
 
+    offset = {
+        top: 40,
+        bottom: 40,
+        left: 40,
+        right: 40
+    };
+
     /**
      * Creates a new coin with random position
      */

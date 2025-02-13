@@ -85,7 +85,7 @@ class Character extends MoveableObject{
     /** @type {boolean} - Indicates if character is in long idle state */
     isLongIdle = false;
     offset = {
-        top: 120,
+        top: 100,
         bottom: 10,
         left: 20,
         right: 20
@@ -241,13 +241,13 @@ class Character extends MoveableObject{
 
     handleIdleAnimation() {
         const idleTime = new Date().getTime() - this.lastMove;
-        if (idleTime > 10000) {
+        if (idleTime > 3000) {
             this.playAnimation(this.images_longIdle);
             if (!this.isLongIdle) {
                 this.isLongIdle = true;
                 this.snoreSound.play();
             }
-        } else if (idleTime > 3000) {
+        } else if (idleTime > 1000) {
             this.playAnimation(this.images_idle);
         }
     }

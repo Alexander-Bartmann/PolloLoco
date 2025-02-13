@@ -292,6 +292,13 @@ class World {
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.throwableObjects);
+        
+        // Rahmen für alle Objekte zeichnen
+        this.character.drawFrame(this.ctx);
+        this.level.enemies.forEach(enemy => enemy.drawFrame(this.ctx));
+        this.coins.forEach(coin => coin.drawFrame(this.ctx));
+        this.bottles.forEach(bottle => bottle.drawFrame(this.ctx));
+        this.throwableObjects.forEach(bottle => bottle.drawFrame(this.ctx));
     }
 
     drawEndGameTimeout() {
