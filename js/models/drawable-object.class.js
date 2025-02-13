@@ -32,7 +32,7 @@ class DrawableObject {
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
      */
     draw(ctx) {
-        if (this.img && this.img.complete) {  // Prüfe ob Bild existiert und geladen ist
+        if (this.img && this.img.complete) { 
             ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
         }
     }

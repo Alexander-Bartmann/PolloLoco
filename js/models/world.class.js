@@ -25,8 +25,8 @@ class World {
     winSound = new Audio('audio/win.mp3');
     loseSound = new Audio('audio/lose.wav');
     intervals = [];
-    soundPlayed = false; // Neue Variable, um zu verfolgen, ob der Sound bereits abgespielt wurde
-    lastThrowTime = 0; // Neue Variable, um die Zeit des letzten Wurfs zu speichern
+    soundPlayed = false;
+    lastThrowTime = 0; 
 
     /**
      * Creates a new World instance
@@ -279,9 +279,9 @@ class World {
     drawGameObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds); // Wolken vor der Statusleiste zeichnen
+        this.addObjectsToMap(this.level.clouds);
         this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusbar); // Statusleiste nach den Wolken zeichnen
+        this.addToMap(this.statusbar);
         this.addToMap(this.coinbar);
         this.addToMap(this.bottlebar);
         if (this.character.x > this.endboss.x - 720) {this.addToMap(this.endbossStatusBar);}

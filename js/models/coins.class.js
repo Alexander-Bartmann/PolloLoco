@@ -23,6 +23,6 @@ class Coins extends MoveableObject {
     constructor() {
         super().loadImage('img/8_coin/coin_1.png');
         this.x = 200 + Math.random() * 2000;
-        this.y = 350 + Math.random() * 10; // Vertikale Position auf Höhe der Hühner gesetzt
+        this.y = 350 + Math.random() * 10; 
     }
 }

@@ -10,7 +10,7 @@ class Character extends MoveableObject{
     bottles = 0;
     isImmune = false;
     isJumping = false;
-    jumpAnimationRunning = false;  // Neue Variable für die Animation
+    jumpAnimationRunning = false; 
     images_walk = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -229,7 +229,6 @@ class Character extends MoveableObject{
 
     handleIdleOrWalkingAnimation() {
         if (this.isAboveGround()) {
-            // Keine neue Jump-Animation starten, wenn wir bereits springen
             return;
         }
         if (this.world.keyboard.right || this.world.keyboard.left) {
