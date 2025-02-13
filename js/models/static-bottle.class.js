@@ -3,6 +3,14 @@
  * @extends DrawableObject
  */
 class StaticBottle extends DrawableObject {
+
+    offset = {
+        top: 40,
+        bottom: 40,
+        left: 40,
+        right: 40
+    };
+
     /**
      * Creates a new static bottle with random x-position on the ground
      */

@@ -1,6 +1,20 @@
 /**
  * Represents the game world containing all game objects and logic
  * @class
+ * @property {Character} character - The main player character
+ * @property {Level} level - The current game level
+ * @property {CanvasRenderingContext2D} ctx - The canvas rendering context
+ * @property {HTMLCanvasElement} canvas - The game canvas element
+ * @property {Keyboard} keyboard - The keyboard input handler
+ * @property {number} camera_x - The camera's x position
+ * @property {StatusBar} statusbar - The health status bar
+ * @property {CoinBar} coinbar - The coin collection status bar
+ * @property {BottleBar} bottlebar - The bottle collection status bar
+ * @property {Array<ThrowableObject>} throwableObjects - Array of throwable bottles
+ * @property {Array<Coins>} coins - Array of collectible coins
+ * @property {Array<StaticBottle>} bottles - Array of collectible bottles
+ * @property {Endboss} endboss - The level's final boss
+ * @property {EndbossStatusBar} endbossStatusBar - The endboss health bar
  */
 class World {
     character = new Character();
@@ -45,8 +59,9 @@ class World {
     }
 
     /**
-     * Sets the volume for all game sounds
+     * Sets the volume for all game audio elements
      * @param {number} volume - Volume level between 0 and 1
+     * @returns {void}
      */
     setVolume(volume) {
         this.coinSound.volume = volume;
@@ -64,7 +79,8 @@ class World {
     }
 
     /**
-     * Starts all game animations and intervals
+     * Initializes and starts all game components and animations
+     * @returns {void}
      */
     startGame() {
         this.run();
@@ -72,11 +88,8 @@ class World {
         this.initializeBottles();
         this.character.startAnimations();
         this.level.enemies.forEach(enemy => {
-            if (enemy instanceof Endboss) {
-                enemy.startAnimations();
-            } else if (enemy.startAnimations) {
-                enemy.startAnimations();
-            }
+            if (enemy instanceof Endboss) {enemy.startAnimations();
+            } else if (enemy.startAnimations) {enemy.startAnimations();}
         });
     }
 
@@ -106,13 +119,9 @@ class World {
         this.intervals = [];
         this.character.stopAllIntervals();
         this.level.enemies.forEach(enemy => {
-            if (enemy.stopAllIntervals) {
-                enemy.stopAllIntervals();
-            }
+            if (enemy.stopAllIntervals) {enemy.stopAllIntervals();}
         });
-        if (this.endboss && this.endboss.stopAllIntervals) {
-            this.endboss.stopAllIntervals();
-        }
+        if (this.endboss && this.endboss.stopAllIntervals) {this.endboss.stopAllIntervals();}
         this.throwableObjects = [];
         this.stopAllSounds();
     }
@@ -140,7 +149,7 @@ class World {
     }
 
     /**
-     * Initializes coins with random positions
+     * Initializes random coin positions throughout the level
      */
     initializeCoins() {
         for (let i = 0; i < 10; i++) {
@@ -152,7 +161,7 @@ class World {
     }
 
     /**
-     * Initializes collectible bottles
+     * Creates and places collectible bottles in the level
      */
     initializeBottles() {
         for (let i = 0; i < 10; i++) {
@@ -161,7 +170,7 @@ class World {
     }
 
     /**
-     * Checks if objects should be thrown
+     * Checks for keyboard input to throw objects
      */
     checkThrowObjects() {
         const currentTime = new Date().getTime();
@@ -177,27 +186,19 @@ class World {
     }
 
     /**
-     * Checks all collision types in the game
+     * Checks all possible collision types between game objects
      */
     checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
-            this.enemiesCollide(enemy);
-        });
-        this.coins.forEach((coin, index) => {
-            this.coinCollide(coin, index);
-        });
-        this.bottles.forEach((bottle, index) => {
-            this.bottleCollide(bottle, index);
-        });
-        this.throwableObjects.forEach((bottle, bottleIndex) => {
-            this.throwableObjectsCollide(bottle, bottleIndex);
-        });
+        this.level.enemies.forEach((enemy) => {this.enemiesCollide(enemy);});
+        this.coins.forEach((coin, index) => {this.coinCollide(coin, index);});
+        this.bottles.forEach((bottle, index) => {this.bottleCollide(bottle, index);});
+        this.throwableObjects.forEach((bottle, bottleIndex) => {this.throwableObjectsCollide(bottle, bottleIndex);});
     }
 
     /**
-     * Handles collisions with throwable objects
-     * @param {ThrowableObject} bottle - The thrown bottle
-     * @param {number} bottleIndex - Index in throwableObjects array
+     * Handles collision detection and effects for throwable objects
+     * @param {ThrowableObject} bottle - The thrown bottle object
+     * @param {number} bottleIndex - Index of the bottle in throwableObjects array
      */
     throwableObjectsCollide(bottle, bottleIndex) {
         if (this.endboss.isColliding(bottle) && !bottle.hasDamaged) {
@@ -206,16 +207,12 @@ class World {
             this.endboss.hit();
             this.endbossStatusBar.setPercentage(this.endboss.energy);
         }
-        if (bottle.y >= 350) {
-            bottle.splash();
-        }
-        if (bottle.toDelete) {
-            this.throwableObjects.splice(bottleIndex, 1);
-        }
+        if (bottle.y >= 350) {bottle.splash();}
+        if (bottle.toDelete) {this.throwableObjects.splice(bottleIndex, 1);}
     }
 
     /**
-     * Handles collisions with collectible bottles
+     * Handles collision detection for collectible bottles
      * @param {StaticBottle} bottle - The collectible bottle
      * @param {number} index - Index in bottles array
      */
@@ -228,7 +225,7 @@ class World {
     }
 
     /**
-     * Handles collisions with coins
+     * Handles coin collection collision detection
      * @param {Coins} coin - The coin object
      * @param {number} index - Index in coins array
      */
@@ -242,14 +239,12 @@ class World {
     }
 
     /**
-     * Handles collisions with enemies
-     * @param {Enemy} enemy - The enemy object
+     * Handles enemy collision detection and effects
+     * @param {Enemy} enemy - The enemy object to check collisions with
      */
     enemiesCollide(enemy) {
         if (this.character.isColliding(enemy)) {
-            if ((enemy instanceof Chicken || enemy instanceof ChickenSmall) && 
-                this.character.isFallingOn(enemy) && 
-                !enemy.isDead) {
+            if ((enemy instanceof Chicken || enemy instanceof ChickenSmall) && this.character.isFallingOn(enemy) && !enemy.isDead) {
                 enemy.die();
                 this.character.setImmunity();
             } else if (!((enemy instanceof Chicken || enemy instanceof ChickenSmall) && enemy.isDead)) {
@@ -260,22 +255,21 @@ class World {
     }
 
     /**
-     * Draws all game objects to the canvas
+     * Renders all game objects on the canvas
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);        
         this.ctx.save();
         this.drawGameObjects();
         this.ctx.restore();        
-        if ((this.character.isDead() || this.endboss.isDead()) && !this.gameEndTimeout) {
-            this.drawEndGameTimeout();
-        }
-        if (this.endScreenVisible) {
-            this.drawEndScreenVisible();
-        }    
+        if ((this.character.isDead() || this.endboss.isDead()) && !this.gameEndTimeout) {this.drawEndGameTimeout();}
+        if (this.endScreenVisible) {this.drawEndScreenVisible();}    
         requestAnimationFrame(() => this.draw());
     }
 
+    /**
+     * Renders game objects with proper camera translation
+     */
     drawGameObjects() {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
@@ -292,8 +286,17 @@ class World {
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.throwableObjects);
+        
+        this.character.drawFrame(this.ctx);
+        this.level.enemies.forEach(enemy => enemy.drawFrame(this.ctx));
+        this.coins.forEach(coin => coin.drawFrame(this.ctx));
+        this.bottles.forEach(bottle => bottle.drawFrame(this.ctx));
+        this.throwableObjects.forEach(bottle => bottle.drawFrame(this.ctx));
     }
 
+    /**
+     * Handles the game end timeout and cleanup
+     */
     drawEndGameTimeout() {
         this.gameEndTimeout = true;
         setTimeout(() => {
@@ -303,6 +306,9 @@ class World {
         }, 2000);
     }
 
+    /**
+     * Renders the appropriate end screen (win/lose)
+     */
     drawEndScreenVisible() {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -320,13 +326,19 @@ class World {
         }                
         document.querySelector('.mobile-controls').style.display = 'none';
     }
-
+    /**
+     * Translates the canvas context for camera movement
+     */
     drawTranslate() {        
         this.ctx.translate(this.camera_x, 0);  
         this.ctx.translate(-this.camera_x, 0);        
         this.ctx.translate(this.camera_x, 0);
     }
 
+    /**
+     * Adds specific game objects to the map
+     * @param {MovableObject} mo - The game object to render
+     */
     drawAddToMap(mo){
         this.addToMap(this.character);
         this.addToMap(this.endboss);          
@@ -336,28 +348,29 @@ class World {
         if (this.character.x > this.endboss.x - 720) {this.addToMap(this.endbossStatusBar);}  
     }
 
+    /**
+     * Adds multiple game objects to the map
+     */
     drawObjectToMap() {
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
         this.addObjectsToMap(this.throwableObjects);          
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);        
-        this.addObjectsToMap(this.level.backgroundObjects);  
+        this.addObjectsToMap(this.level.backgroundObjects);      
     }
 
     /**
-     * Adds multiple objects to the map
-     * @param {MovableObject[]} objects - Array of objects to draw
+     * Adds multiple objects to the game world
+     * @param {MovableObject[]} objects - Array of game objects to render
      */
     addObjectsToMap(objects){
-        objects.forEach(object => {
-            this.addToMap(object);
-        });
+        objects.forEach(object => {this.addToMap(object);});
     }
 
     /**
-     * Adds a single object to the map
-     * @param {MovableObject} mo - The object to draw
+     * Adds a single object to the game world
+     * @param {MovableObject} mo - The game object to render
      */
     addToMap(mo){
         if(mo.otherDirection){this.flipImage(mo);}
@@ -366,7 +379,7 @@ class World {
     }
 
     /**
-     * Flips an image horizontally
+     * Flips an object's image horizontally
      * @param {MovableObject} mo - The object to flip
      */
     flipImage(mo){

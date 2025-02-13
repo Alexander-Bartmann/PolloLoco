@@ -115,6 +115,7 @@ class Character extends MoveableObject{
 
     /**
      * Reduces character's energy when hit if not immune
+     * Implements damage cooldown of 500ms
      */
     hit() {
         if (!this.isImmune) {
@@ -132,6 +133,7 @@ class Character extends MoveableObject{
 
     /**
      * Handles character movement based on keyboard input
+     * Controls walking right/left and jumping
      */
     movement() {
         if (this.world.keyboard.right && this.x < this.world.endboss.x) {
@@ -149,16 +151,25 @@ class Character extends MoveableObject{
         this.updateCameraPosition();
     }
 
+    /**
+     * Moves character right and updates the last movement timestamp
+     */
     moveRightAndUpdate() {
         this.moveRight();
         this.updateLastMove();
     }
 
+    /**
+     * Moves character left and updates the last movement timestamp
+     */
     moveLeftAndUpdate() {
         this.moveLeft();
         this.updateLastMove();
     }
 
+    /**
+     * Initiates jump movement and starts jump animation
+     */
     jumpAndUpdate() {
         this.isJumping = true;
         this.jump();
@@ -169,6 +180,10 @@ class Character extends MoveableObject{
         }
     }
 
+    /**
+     * Handles the jump animation sequence
+     * Plays animation frames and handles animation end
+     */
     startJumpAnimation() {
         if (!this.jumpAnimationRunning) {
             this.jumpAnimationRunning = true;
@@ -186,6 +201,9 @@ class Character extends MoveableObject{
         }
     }
 
+    /**
+     * Updates the camera position relative to character position
+     */
     updateCameraPosition() {
         this.world.camera_x = -this.x + 100;
     }
@@ -200,6 +218,7 @@ class Character extends MoveableObject{
 
     /**
      * Handles all character animations based on current state
+     * Controls death, hurt, and idle animations
      */
     animation() {
         if (this.isDead()) {
@@ -213,6 +232,10 @@ class Character extends MoveableObject{
         }
     }
 
+    /**
+     * Handles death animation sequence
+     * Plays death animation and stops all intervals after completion
+     */
     handleDeathAnimation() {
         let deathAnimationTime = this.images_dead.length * 100;
         this.playAnimation(this.images_dead);
@@ -222,11 +245,17 @@ class Character extends MoveableObject{
         }, deathAnimationTime);
     }
 
+    /**
+     * Handles hurt animation and plays hurt sound
+     */
     handleHurtAnimation() {
         this.playAnimation(this.images_hurt);
         this.hurtSound.play();
     }
 
+    /**
+     * Handles walking and idle animations based on keyboard input
+     */
     handleIdleOrWalkingAnimation() {
         if (this.isAboveGround()) {
             return;
@@ -239,6 +268,10 @@ class Character extends MoveableObject{
         }
     }
 
+    /**
+     * Handles idle animations with different states based on idle duration
+     * Switches between normal idle and long idle animations
+     */
     handleIdleAnimation() {
         const idleTime = new Date().getTime() - this.lastMove;
         if (idleTime > 3000) {
@@ -253,7 +286,7 @@ class Character extends MoveableObject{
     }
 
     /**
-     * Initializes animation and movement intervals
+     * Initializes and starts animation and movement intervals
      */
     animate() {
 
@@ -267,7 +300,7 @@ class Character extends MoveableObject{
     }
 
     /**
-     * Stops all running intervals
+     * Stops all running animation and movement intervals
      */
     stopAllIntervals() {
         clearInterval(this.animationInterval);
@@ -275,7 +308,7 @@ class Character extends MoveableObject{
     }
 
     /**
-     * Makes the character jump
+     * Makes the character jump by setting vertical speed
      */
     jump() {
         this.speedY = 25;
@@ -283,6 +316,7 @@ class Character extends MoveableObject{
 
     /**
      * Makes the character temporarily immune to damage
+     * Immunity lasts for 500ms
      */
     setImmunity() {
         this.isImmune = true;
@@ -303,6 +337,10 @@ class Character extends MoveableObject{
         this.jumpSound.volume = volume;
     }
 
+    /**
+     * Stops all character-related sound effects
+     * Resets sound playback to beginning
+     */
     stopSounds() {
         this.hurtSound.pause();
         this.hurtSound.currentTime = 0;
