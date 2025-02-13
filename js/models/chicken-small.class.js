@@ -26,9 +26,9 @@ class ChickenSmall extends MoveableObject {
     /** @type {Object} - Collision offset values to make hit detection more forgiving */
     offset = {
         top: -20,  
-        bottom: -10,
-        left: -10,
-        right: -10
+        bottom: 10,
+        left: -15,
+        right: -15
     };
 
     /**
