@@ -159,7 +159,7 @@ class Character extends MoveableObject {
      * Controls walking right/left and jumping
      */
     movement() {
-        if (this.world.keyboard.right && this.x < this.world.endboss.x) {
+        if (this.world.keyboard.right && this.x < 2200) {
             this.moveRightAndUpdate();
         }
 

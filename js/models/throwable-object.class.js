@@ -41,8 +41,9 @@ class ThrowableObject extends MoveableObject {
      * Creates a new throwable object
      * @param {number} x - Initial X position
      * @param {number} y - Initial Y position
+     * @param {boolean} otherDirection - Throw direction (true = left, false = right)
      */
-    constructor(x, y) {
+    constructor(x, y, otherDirection) {  // Parameter otherDirection hinzugefügt
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.loadImages(this.images_bottleThrow);
         this.loadImages(this.images_bottleSplash);
@@ -50,6 +51,7 @@ class ThrowableObject extends MoveableObject {
         this.y = y;
         this.height = 60;
         this.width = 50;
+        this.otherDirection = otherDirection;  // Speichern der Wurfrichtung
         this.throw();
         this.animate();
         this.splashSound.muted = isMuted;
@@ -63,7 +65,11 @@ class ThrowableObject extends MoveableObject {
         this.apllyGravity();
         this.throwInterval = setInterval(() => {
             if (!this.isSplashing) {
-                this.x += 10;
+                if (this.otherDirection) {
+                    this.x -= 10;  // Nach links werfen
+                } else {
+                    this.x += 10;  // Nach rechts werfen
+                }
             }
         }, 25);
     }

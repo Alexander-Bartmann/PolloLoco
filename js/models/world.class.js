@@ -178,9 +178,9 @@ class World {
      */
     checkThrowObjects() {
         const currentTime = new Date().getTime();
-        if (this.keyboard.r && this.character.bottles > 0 && currentTime - this.lastThrowTime > 5000 && !this.endboss.isHurtState) {
+        if (this.keyboard.r && this.character.bottles > 0 && currentTime - this.lastThrowTime > 3500 && !this.endboss.isHurtState) {
             let throwPositionY = this.character.y + 100;
-            let bottle = new ThrowableObject(this.character.x, throwPositionY);
+            let bottle = new ThrowableObject(this.character.x, throwPositionY, this.character.otherDirection);  // otherDirection übergeben
             bottle.splashSound.muted = isMuted;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 1;

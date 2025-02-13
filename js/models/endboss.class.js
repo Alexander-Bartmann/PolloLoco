@@ -33,6 +33,11 @@ class Endboss extends MoveableObject {
         right: 40
     };
 
+    /** @type {number} - Minimum x-position boundary */
+    minX = 719;
+    /** @type {number} - Maximum x-position boundary */
+    maxX = 719 * 3;
+
     /** @type {string[]} - Walking animation image paths */
     images_walk = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -141,9 +146,28 @@ class Endboss extends MoveableObject {
     startMovementInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead() && !this.hurtTimeout) {
-                this.x -= this.speed;
+                this.moveInBoundary();
             }
         }, 1000 / 60);
+    }
+
+    /**
+     * Moves the endboss within defined boundaries
+     */
+    moveInBoundary() {
+        if (this.otherDirection) {
+            // Bewegung nach rechts
+            this.x += this.speed;
+            if (this.x >= this.maxX) {
+                this.otherDirection = false;
+            }
+        } else {
+            // Bewegung nach links
+            this.x -= this.speed;
+            if (this.x <= this.minX) {
+                this.otherDirection = true;
+            }
+        }
     }
 
     /**
